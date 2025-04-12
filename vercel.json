@@ -2,7 +2,7 @@
   "github": {
     "enabled": false
   },
-  "rootDirectory": "./frontend",
+  "rootDirectory": "frontend",
   "buildCommand": "npm build",
   "framework": "angular",
   "installCommand": "npm install"
