@@ -1,0 +1,10 @@
+{
+  "github": {
+    "enabled": false
+  },
+  "rootDirectory": "frontend",
+  "buildCommand": "npm build",
+  "framework": "angular",
+  "installCommand": "npm install",
+  "outputDirectory": "public"
+}
