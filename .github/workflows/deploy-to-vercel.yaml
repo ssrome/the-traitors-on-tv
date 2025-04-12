@@ -8,8 +8,13 @@ on:
   push:
     paths:
       - "frontend/**"
+    branches-ignore:
+      - "dependabot/**"
 
 jobs:
+  Call-Tests-Workflow:
+    uses: ./.github/workflows/tests.yaml
+
   Deploy-Preview:
     if: github.ref_name != 'main'
     runs-on: ubuntu-latest
