@@ -6,5 +6,5 @@
   "buildCommand": "npm build",
   "framework": "angular",
   "installCommand": "npm install",
-  "outputDirectory": "frontend/public"
+  "outputDirectory": "public"
 }
