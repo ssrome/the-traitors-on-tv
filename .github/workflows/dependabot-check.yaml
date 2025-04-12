@@ -1,0 +1,18 @@
+name: Dependabot Check
+
+on:
+  push:
+    branches:
+      - "dependabot/**"
+
+jobs:
+  Call-Tests-Workflow:
+    uses: ./.github/workflows/tests.yaml
+
+  Check-Dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    needs: Call-Tests-Workflow
+    steps:
+      - run: echo "PR created by Dependabot"
+      - run: echo "DEPLOY_TO_VERCEL=false" >> $GITHUB_ENV
