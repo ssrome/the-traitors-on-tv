@@ -1,0 +1,46 @@
+name: Tests
+
+on: workflow_call
+
+jobs:
+  Unit-Tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm run test-headless
+
+  # E2E-Tests:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: frontend
+  #   needs: Unit-Tests
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #     - name: Install dependencies
+  #       run: npm install
+  #     - name: Run Cypress
+  #       uses: cypress-io/github-action@v4
+  #       with:
+  #         command: npm run test:e2e

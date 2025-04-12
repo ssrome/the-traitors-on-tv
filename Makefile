@@ -8,4 +8,4 @@ build-fe:
 	npm build --prefix frontend
 
 test-fe:
-	npm test --prefix frontend
+	npm run test:unit --prefix frontend
