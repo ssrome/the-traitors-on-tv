@@ -101,3 +101,5 @@ jobs:
             --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
             --stack-name ${{ github.repository }}-${{ github.ref_name }} \
             --capabilities ${{ env.CAPABILITIES }}
+
+          fi
