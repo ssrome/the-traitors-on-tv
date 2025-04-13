@@ -66,6 +66,24 @@ jobs:
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
+      - name: Congigure project name
+        id: project-name
+        env:
+          NAME: ${{ github.repository }}
+        run: |
+          PROJECT=`echo "${NAME#s}"`
+          echo "Project name: $PROJECT"
+          echo "project=$PROJECT" >> $GITHUB_OUTPUT
+
+      - name: Congigure clean branch name
+        id: branch-name
+        env:
+          REF: ${{ github.ref_name }}
+        run: |
+          BRANCH=echo $REF | tr "/" "-"`
+          echo "Project name: $BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
       - name: Predeploy script
         run: |
           make predeploy
@@ -88,17 +106,17 @@ jobs:
           if [ {{ github.ref_name }} == "main" ]; then
             aws cloudformation deploy \
             --s3-bucket ${{ env.BUCKET_NAME }} \
-            --s3-prefix ${{ github.repository }} \
+            --s3-prefix ${{ steps.project-name.outputs.project }} \
             --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
-            --stack-name ${{ steps.env-name.outputs.environment }} \
+            --stack-name ${{ steps.project-name.outputs.project }} \
             --capabilities ${{ env.CAPABILITIES }}
 
           else 
             aws cloudformation deploy \
             --s3-bucket ${{ env.BUCKET_NAME }} \
-            --s3-prefix ${{ github.repository }} \
+            --s3-prefix ${{ steps.project-name.outputs.project }} \
             --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
-            --stack-name ${{ steps.env-name.outputs.environment }}-${{ github.ref_name }} \
+            --stack-name ${{ steps.project-name.outputs.project }}-${{ steps.branch-name.outputs.branch }} \
             --capabilities ${{ env.CAPABILITIES }}
 
           fi

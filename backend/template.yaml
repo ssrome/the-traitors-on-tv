@@ -21,6 +21,7 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Default: "/thetraitorsontv/AlgoliaObjectAPIKeyProd"
 
+Globals:
   Function:
     Timeout: 180
     MemorySize: 256
