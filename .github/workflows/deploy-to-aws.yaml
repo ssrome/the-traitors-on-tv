@@ -70,30 +70,30 @@ jobs:
 
       - name: Remove objects in S3 folder
         run: |
-          aws s3 rm s3://${{ BUCKET_NAME }}/${{ github.repository }} --recursive
+          aws s3 rm s3://${{ env.BUCKET_NAME }}/${{ github.repository }} --recursive
 
       - name: Package
         run: |
           aws cloudformation package \
             --template-file template.yaml \
             --s3-prefix ${{ github.repository }} \
-            --output-template-file ${{ PACKAGED-TEMPLATE-FILE }} \
-            --s3-bucket ${{ BUCKET_NAME }}
+            --output-template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
+            --s3-bucket ${{ env.BUCKET_NAME }}
 
       - name: Deploy
         run: |
           if [ {{ github.ref_name }} == "main" ]; then
             aws cloudformation deploy \
-            --s3-bucket ${{ BUCKET_NAME }} \
+            --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ github.repository }} \
-            --template-file ${{ PACKAGED-TEMPLATE-FILE }} \
+            --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
             --stack-name ${{ github.repository }} \
-            --capabilities ${{ CAPABILITIES }}
+            --capabilities ${{ env.CAPABILITIES }}
 
           else 
             aws cloudformation deploy \
-            --s3-bucket $BUCKET_NAME \
+            --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ github.repository }} \
-            --template-file ${{ PACKAGED-TEMPLATE-FILE }} \
+            --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
             --stack-name ${{ github.repository }}-${{ github.ref_name }} \
-            --capabilities ${{ CAPABILITIES }}
+            --capabilities ${{ env.CAPABILITIES }}
