@@ -12,8 +12,8 @@ on:
       - "dependabot/**"
 
 jobs:
-  Call-Tests-Workflow:
-    uses: ./.github/workflows/tests.yaml
+  Call-Frontend-Tests-Workflow:
+    uses: ./.github/workflows/frontend-tests.yaml
 
   Deploy-Preview:
     if: github.ref_name != 'main'
@@ -22,7 +22,7 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
-    needs: Call-Tests-Workflow
+    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v4
 
@@ -45,7 +45,7 @@ jobs:
       run:
         shell: bash
         working-directory: ./frontend
-    needs: Call-Tests-Workflow
+    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v4
 

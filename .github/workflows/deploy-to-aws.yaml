@@ -1,0 +1,122 @@
+name: Deploy
+
+env:
+  BUCKET_NAME: ssrome-artifacts
+  CAPABILITIES: CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  PACKAGED-TEMPLATE-FILE: template.packaged.yml
+
+on:
+  push:
+    # paths:
+    #     - "backend/**"
+    branches-ignore:
+      - "dependabot/**"
+
+jobs:
+  Call-Backend-Tests-Workflow:
+    uses: ./.github/workflows/backend-tests.yaml
+
+  deploy:
+    runs-on: ubuntu-latest
+    outputs:
+      env-name: ${{ steps.env-name.outputs.environment }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    needs: Call-Backend-Tests-Workflow
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Pip
+        run: |
+          python -m pip install --upgrade pip
+          pip --version
+
+      - name: Setup AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+        # run: |
+        #   pip uninstall awscli
+        #   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        #   unzip awscliv2.zip
+        #   ./aws/install --update
+        #   aws --version
+
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-1"
+
+      - name: Configure environment name
+        id: env-name
+        env:
+          REPO: ${{ github.repository }}-${{ github.ref_name }}
+        run: |
+          ENVIRONMENT=`echo $REPO | tr "/" "-"`
+          echo "Environment name: $ENVIRONMENT"
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+      - name: Congigure project name
+        id: project-name
+        env:
+          NAME: ${{ github.repository }}
+        run: |
+          PROJECT=`echo "${NAME#ssrome/}"`
+          echo "Project name: $PROJECT"
+          echo "project=$PROJECT" >> $GITHUB_OUTPUT
+
+      - name: Congigure clean branch name
+        id: branch-name
+        env:
+          REF: ${{ github.ref_name }}
+        run: |
+          BRANCH=`echo $REF | tr "/" "-"`
+          echo "Branch name: $BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Predeploy script
+        run: |
+          make predeploy
+          find ./dist/ -type f -exec touch -t 202001011200 '{}' \;
+
+      - name: Remove objects in S3 folder
+        run: |
+          aws s3 rm s3://${{ env.BUCKET_NAME }}/${{ github.repository }} --recursive
+
+      - name: Package
+        run: |
+          aws cloudformation package \
+            --template-file template.yaml \
+            --s3-prefix ${{ github.repository }} \
+            --output-template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
+            --s3-bucket ${{ env.BUCKET_NAME }}
+
+      - name: Deploy
+        run: |
+          if [ {{ github.ref_name }} == "main" ]; then
+            aws cloudformation deploy \
+            --s3-bucket ${{ env.BUCKET_NAME }} \
+            --s3-prefix ${{ steps.project-name.outputs.project }} \
+            --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
+            --stack-name ${{ steps.project-name.outputs.project }} \
+            --capabilities ${{ env.CAPABILITIES }}
+
+          else 
+            aws cloudformation deploy \
+            --s3-bucket ${{ env.BUCKET_NAME }} \
+            --s3-prefix ${{ steps.project-name.outputs.project }} \
+            --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
+            --stack-name ${{ steps.project-name.outputs.project }}-${{ steps.branch-name.outputs.branch }} \
+            --capabilities ${{ env.CAPABILITIES }}
+
+          fi
