@@ -34,11 +34,6 @@ jobs:
         with:
           python-version: 3.9
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
       - name: Setup AWS CLI
         run: |
           python -m pip install --upgrade pip
