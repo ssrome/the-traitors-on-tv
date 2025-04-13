@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to AWS
 
 env:
   BUCKET_NAME: ssrome-artifacts
@@ -7,8 +7,8 @@ env:
 
 on:
   push:
-    # paths:
-    #     - "backend/**"
+    paths:
+      - "backend/**"
     branches-ignore:
       - "dependabot/**"
 
@@ -42,12 +42,6 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: 2
-        # run: |
-        #   pip uninstall awscli
-        #   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        #   unzip awscliv2.zip
-        #   ./aws/install --update
-        #   aws --version
 
       - name: Configure AWS credentials
         id: creds
