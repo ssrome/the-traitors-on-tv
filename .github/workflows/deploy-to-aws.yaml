@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       env-name: ${{ steps.env-name.outputs.environment }}
+      packaged-template-file: ${{ steps.packaged-template-file.outputs.environment }}
     defaults:
       run:
         shell: bash
@@ -33,10 +34,17 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Setup AWS CLI
+      - name: Install Pip
         run: |
           python -m pip install --upgrade pip
-          pip install awscli
+          pip --version
+
+      - name: Setup AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          aws --version
 
       - name: Configure AWS credentials
         id: creds
@@ -62,30 +70,30 @@ jobs:
 
       - name: Remove objects in S3 folder
         run: |
-          aws s3 rm s3://$BUCKET_NAME/${{ github.repository }} --recursive
+          aws s3 rm s3://${{ BUCKET_NAME }}/${{ github.repository }} --recursive
 
       - name: Package
         run: |
           aws cloudformation package \
             --template-file template.yaml \
             --s3-prefix ${{ github.repository }} \
-            --output-template-file $PACKAGED-TEMPLATE-FILE \
-            --s3-bucket $BUCKET_NAME
+            --output-template-file ${{ PACKAGED-TEMPLATE-FILE }} \
+            --s3-bucket ${{ BUCKET_NAME }}
 
       - name: Deploy
         run: |
           if [ {{ github.ref_name }} == "main" ]; then
             aws cloudformation deploy \
-            --s3-bucket $BUCKET_NAME \
+            --s3-bucket ${{ BUCKET_NAME }} \
             --s3-prefix ${{ github.repository }} \
-            --template-file $PACKAGED-TEMPLATE-FILE \
+            --template-file ${{ PACKAGED-TEMPLATE-FILE }} \
             --stack-name ${{ github.repository }} \
-            --capabilities $CAPABILITIES 
+            --capabilities ${{ CAPABILITIES }}
 
           else 
             aws cloudformation deploy \
             --s3-bucket $BUCKET_NAME \
             --s3-prefix ${{ github.repository }} \
-            --template-file $PACKAGED-TEMPLATE-FILE \
+            --template-file ${{ PACKAGED-TEMPLATE-FILE }} \
             --stack-name ${{ github.repository }}-${{ github.ref_name }} \
-            --capabilities $CAPABILITIES
+            --capabilities ${{ CAPABILITIES }}
