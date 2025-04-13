@@ -71,7 +71,7 @@ jobs:
         env:
           NAME: ${{ github.repository }}
         run: |
-          PROJECT=`echo "${NAME#s}"`
+          PROJECT=`echo "${NAME#ssrome/}"`
           echo "Project name: $PROJECT"
           echo "project=$PROJECT" >> $GITHUB_OUTPUT
 
@@ -80,7 +80,7 @@ jobs:
         env:
           REF: ${{ github.ref_name }}
         run: |
-          BRANCH=echo $REF | tr "/" "-"`
+          BRANCH=`echo $REF | tr "/" "-"`
           echo "Project name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
