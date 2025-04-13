@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  push:
+    # paths:
+    #     - "backend/**"
+    branches-ignore:
+      - "dependabot/**"
+
+jobs:
+  Call-Backend-Tests-Workflow:
+    uses: ./.github/workflows/backend-tests.yaml
+
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    needs: Call-Backend-Tests-Workflow
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Setup AWS CLI
+        run: |
+          python -m pip install --upgrade pip
+          pip install awscli
+
+      #     # replace
+      # - name: Install Serverless CLI
+      #   run: |
+      #     curl -o- -L https://slss.io/install | bash
+      #     echo "$HOME/.serverless/bin" >> $GITHUB_PATH
+      # - name: Install npm packages
+      #   run: npm i
+      # - name: Deploy
+      #   run: sls deploy --verbose
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
