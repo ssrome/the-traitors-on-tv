@@ -7,12 +7,20 @@ on:
     branches-ignore:
       - "dependabot/**"
 
+    inputs:
+    region:
+      description: "AWS Region"
+      required: true
+      default: "eu-west-1"
+
 jobs:
   Call-Backend-Tests-Workflow:
     uses: ./.github/workflows/backend-tests.yaml
 
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      env-name: ${{ steps.env-name.outputs.environment }}
     defaults:
       run:
         shell: bash
@@ -21,28 +29,34 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.9
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
+
       - name: Setup AWS CLI
         run: |
           python -m pip install --upgrade pip
           pip install awscli
 
-      #     # replace
-      # - name: Install Serverless CLI
-      #   run: |
-      #     curl -o- -L https://slss.io/install | bash
-      #     echo "$HOME/.serverless/bin" >> $GITHUB_PATH
-      # - name: Install npm packages
-      #   run: npm i
-      # - name: Deploy
-      #   run: sls deploy --verbose
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ github.event.inputs.region}}
+
+      - name: Configure environment name
+        id: env-name
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          ENVIRONMENT=`echo $REPO | tr "/" "-"`
+          echo "Environment name: $ENVIRONMENT"
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
