@@ -49,6 +49,7 @@ Resources:
                 Ref: AlgoliaObjectAPIKeyProd,
                 Ref: AlgoliaObjectAPIKeyDev,
               ]
+      Events:
         TriggerCallTMDBApi:
           Type: Schedule
           Properties:

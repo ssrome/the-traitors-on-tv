@@ -81,7 +81,7 @@ jobs:
           REF: ${{ github.ref_name }}
         run: |
           BRANCH=`echo $REF | tr "/" "-"`
-          echo "Project name: $BRANCH"
+          echo "Branch name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
       - name: Predeploy script
