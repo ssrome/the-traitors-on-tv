@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: AWS serverless project for The Traitors TV information
+
+Conditions:
+  isSamLocal:
+    Fn::Equals: [Ref: "AWS::StackName", ""]
+  isMain:
+    Fn::Equals: [Ref: "AWS::StackName", "thetraitorsontv"]
+
+Parameters:
+  AlgoliaApplicationID:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/AlgoliaApplicationID"
+
+  AlgoliaObjectAPIKeyDev:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/AlgoliaObjectAPIKeyDev"
+
+  AlgoliaObjectAPIKeyProd:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/AlgoliaObjectAPIKeyProd"
+
+  Function:
+    Timeout: 180
+    MemorySize: 256
+    Runtime: python3.13
+
+    Environment:
+      Variables:
+        BUILD_ENV: "production"
+
+Resources:
+  # Functions
+  CallTMDBApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./dist
+      Handler: "callTMDBApi.handler"
+      Environment:
+        Variables:
+          AlgoliaApplicationID:
+            Ref: "AlgoliaApplicationID"
+          AlgoliaAPIKey:
+            Fn::If:
+              [
+                isMain,
+                Ref: AlgoliaObjectAPIKeyProd,
+                Ref: AlgoliaObjectAPIKeyDev,
+              ]
+        TriggerCallTMDBApi:
+          Type: Schedule
+          Properties:
+            Enabled: True
+            Schedule:
+              Fn::If: [isMain, "cron(1 0 * * ? *)", "cron(1 0 ? * 2 *)"]
+      Policies:
+        - AmazonDynamoDBReadOnlyAccess

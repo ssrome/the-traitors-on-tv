@@ -1,5 +1,10 @@
 name: Deploy
 
+env:
+  BUCKET_NAME: ssrome-artifacts
+  CAPABILITIES: CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  PACKAGED-TEMPLATE-FILE: template.packaged.yml
+
 on:
   push:
     # paths:
@@ -46,6 +51,41 @@ jobs:
         env:
           REPO: ${{ github.repository }}-${{ github.ref_name }}
         run: |
-          ENVIRONMENT=`echo $REPO | tr ${{ github.repository_owner }}"/" " " | tr -d ' '`
+          ENVIRONMENT=`echo $REPO | tr "/" "-"`
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+      - name: Predeploy script
+        run: |
+          make predeploy
+          find ./dist/ -type f -exec touch -t 202001011200 '{}' \;
+
+      - name: Remove objects in S3 folder
+        run: |
+          aws s3 rm s3://$BUCKET_NAME/${{ github.repository }} --recursive
+
+      - name: Package
+        run: |
+          aws cloudformation package \
+            --template-file template.yaml \
+            --s3-prefix ${{ github.repository }} \
+            --output-template-file $PACKAGED-TEMPLATE-FILE \
+            --s3-bucket $BUCKET_NAME
+
+      - name: Deploy
+        run: |
+          if [ {{ github.ref_name }} == "main" ]; then
+            aws cloudformation deploy \
+            --s3-bucket $BUCKET_NAME \
+            --s3-prefix ${{ github.repository }} \
+            --template-file $PACKAGED-TEMPLATE-FILE \
+            --stack-name ${{ github.repository }} \
+            --capabilities $CAPABILITIES 
+
+          else 
+            aws cloudformation deploy \
+            --s3-bucket $BUCKET_NAME \
+            --s3-prefix ${{ github.repository }} \
+            --template-file $PACKAGED-TEMPLATE-FILE \
+            --stack-name ${{ github.repository }}-${{ github.ref_name }} \
+            --capabilities $CAPABILITIES
