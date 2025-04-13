@@ -7,12 +7,6 @@ on:
     branches-ignore:
       - "dependabot/**"
 
-    inputs:
-      region:
-        description: "AWS Region"
-        required: true
-        default: "eu-west-1"
-
 jobs:
   Call-Backend-Tests-Workflow:
     uses: ./.github/workflows/backend-tests.yaml
@@ -45,7 +39,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ github.event.inputs.region}}
+          aws-region: "eu-west-1"
 
       - name: Configure environment name
         id: env-name
