@@ -43,9 +43,20 @@ jobs:
 
       - name: Configure environment name
         id: env-name
+        if: github.ref_name == 'main'
         env:
           REPO: ${{ github.repository }}
         run: |
-          ENVIRONMENT=`echo $REPO | tr "/" "-"`
+          ENVIRONMENT=`echo $REPO | tr ${{repository_owner}}"/" ""`
+          echo "Environment name: $ENVIRONMENT"
+          echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+      - name: Configure environment name
+        id: env-name
+        if: github.ref_name != 'main'
+        env:
+          REPO: ${{ github.repository }}-${{ github.ref_name }}
+        run: |
+          ENVIRONMENT=`echo $REPO | tr ${{repository_owner}}"/" ""`
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
