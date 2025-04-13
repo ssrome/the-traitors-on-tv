@@ -46,6 +46,6 @@ jobs:
         env:
           REPO: ${{ github.repository }}-${{ github.ref_name }}
         run: |
-          ENVIRONMENT=`echo $REPO | tr -d ${{ github.repository_owner }}"/" `
+          ENVIRONMENT=`echo $REPO | tr ${{ github.repository_owner }}"/" " " | tr -s ' '`
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
