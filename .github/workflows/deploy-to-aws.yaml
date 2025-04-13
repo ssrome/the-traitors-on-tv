@@ -91,7 +91,7 @@ jobs:
             --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ github.repository }} \
             --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
-            --stack-name ${{ github.repository }} \
+            --stack-name $ENVIRONMENT \
             --capabilities ${{ env.CAPABILITIES }}
 
           else 
@@ -99,7 +99,7 @@ jobs:
             --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ github.repository }} \
             --template-file ${{ env.PACKAGED-TEMPLATE-FILE }} \
-            --stack-name ${{ github.repository }}-${{ github.ref_name }} \
+            --stack-name $ENVIRONMENT-${{ github.ref_name }} \
             --capabilities ${{ env.CAPABILITIES }}
 
           fi
