@@ -8,10 +8,10 @@ on:
       - "dependabot/**"
 
     inputs:
-    region:
-      description: "AWS Region"
-      required: true
-      default: "eu-west-1"
+      region:
+        description: "AWS Region"
+        required: true
+        default: "eu-west-1"
 
 jobs:
   Call-Backend-Tests-Workflow:
