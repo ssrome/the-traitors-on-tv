@@ -41,7 +41,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "eu-west-1"
 
-      - name: Configure environment name
+      - name: Configure environment name for main
         id: env-name
         if: github.ref_name == 'main'
         env:
@@ -51,7 +51,7 @@ jobs:
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
-      - name: Configure environment name
+      - name: Configure environment name for feature branches
         id: env-name
         if: github.ref_name != 'main'
         env:
