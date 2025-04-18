@@ -7,5 +7,5 @@ frontend/.angular
 frontend/.DS_Store
 .DS_Store
 .vercel
-frontend/.env
+backend/.env
 frontend/src/environments/environment.local.ts

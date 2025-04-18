@@ -1,0 +1,15 @@
+<div>
+  <h2>Next Episode To Air</h2>
+
+  <ul *ngFor="let show of showsNextToAir">
+    <li>
+      {{ show?.original_name }} ({{ show?.origin_country[0] }})
+      <br />
+      {{ show?.next_episode_to_air?.air_date | date }}
+      <br />
+      S{{ show?.next_episode_to_air?.season_number }} Ep.{{
+        show?.next_episode_to_air?.episode_number
+      }}
+    </li>
+  </ul>
+</div>
