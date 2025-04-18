@@ -1,5 +1,40 @@
 # import boto3
 # import botocore
+# import uuid
+
+ids = [
+  {
+    "objectID": 231478
+  },
+  {
+    "objectID": 208398
+  },
+  {
+    "objectID": 234294
+  },
+  {
+    "objectID": 117893
+  },
+  {
+    "objectID": 246125
+  },
+  {
+    "objectID": 244999
+  },
+  {
+    "objectID": 223503
+  },
+  {
+    "objectID": 232058
+  },
+  {
+    "objectID": 285613
+  },
+  {
+    "objectID": 261325
+  }
+]
+
 
 def handler(event, context):
    return 'Hello world'
