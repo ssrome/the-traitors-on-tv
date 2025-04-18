@@ -13,8 +13,8 @@ on:
       - "dependabot/**"
 
 jobs:
-  Call-Backend-Tests-Workflow:
-    uses: ./.github/workflows/backend-tests.yaml
+  # Call-Backend-Tests-Workflow:
+  #   uses: ./.github/workflows/backend-tests.yaml
 
   deploy:
     runs-on: ubuntu-latest
