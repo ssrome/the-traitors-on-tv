@@ -6,3 +6,6 @@ run-env:
 
 install-be:
 	pip install -r requirements.txt
+
+update-req:
+	pip freeze > requirements.txt 
