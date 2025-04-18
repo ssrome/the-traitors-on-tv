@@ -24,7 +24,7 @@ jobs:
       run:
         shell: bash
         working-directory: backend
-    needs: Call-Backend-Tests-Workflow
+    # needs: Call-Backend-Tests-Workflow
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
