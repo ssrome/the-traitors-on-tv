@@ -79,4 +79,5 @@ def handler(event, context):
   )
   
   print(to_save)
+  print(save_resp)
   return "saved"
