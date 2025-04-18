@@ -52,7 +52,7 @@ Resources:
   CallTMDBApi:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist
+      CodeUri: callTMDBApi
       Handler: "callTMDBApi.handler"
       Environment:
         Variables:

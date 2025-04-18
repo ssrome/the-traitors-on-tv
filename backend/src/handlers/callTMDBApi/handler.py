@@ -1,6 +1,4 @@
-# import boto3
-# import botocore
-import datetime
+from datetime import datetime
 import requests
 import uuid
 import os
@@ -57,7 +55,7 @@ def handler(event, context):
 
   response = requests.get(url, params=params, headers=headers)
   response_json = response.json()
-  date_now = datetime.datetime.now()
+  date_now = datetime.now()
   # additional_properties = { uuid: uuid.uuid4(), 'objectID': 231478, 'updatedTimestamp':  date_now}
 
   to_save = {**response.json(), 'objectID': 231478 }
