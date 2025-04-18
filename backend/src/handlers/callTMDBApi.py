@@ -44,9 +44,10 @@ ids = [
 ]
 
 # if __name__ == "__main__":
+#   print(uuid.uuid4())
 def handler(event, context):
   url = os.environ.get('TMDB_API') + "231478"
-  print(url)
+  
   params = {
     "api_key":  os.environ.get('TMDB_API_KEY')
   }
@@ -56,8 +57,10 @@ def handler(event, context):
 
   response = requests.get(url, params=params, headers=headers)
   response_json = response.json()
+  date_now = datetime.datetime.now()
+  # additional_properties = { uuid: uuid.uuid4(), 'objectID': 231478, 'updatedTimestamp':  date_now}
 
-  to_save = {**response.json(), 'objectID': 231478, 'uuid': uuid.uuid4(), 'updatedTimestamp': datetime.datetime.now() }
+  to_save = {**response.json(), 'objectID': 231478 }
 
   app_id = os.environ.get('ALGOLIA_APPLICATION_ID')
   api_key = os.environ.get('ALGOLIA_API_KEY')
@@ -75,5 +78,5 @@ def handler(event, context):
       task_id=save_resp.task_id,
   )
   
-  print(save_resp)
+  print(to_save)
   return "saved"
