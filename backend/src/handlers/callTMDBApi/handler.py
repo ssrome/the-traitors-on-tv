@@ -43,6 +43,7 @@ ids = [
 
 # if __name__ == "__main__":
 #   print(uuid.uuid4())
+
 def handler(event, context):
   url = os.environ.get('TMDB_API') + "231478"
   
