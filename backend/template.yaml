@@ -54,6 +54,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/handlers/call_tmdb_api
+      Layers:
+        - !Ref PythonProjectLayer
+      Architectures:
+        - x86_64
       Environment:
         Variables:
           ALGOLIA_APPLICATION_ID:
@@ -69,6 +73,8 @@ Resources:
             Fn::If: [isMain, Ref: AlgoliaIndexProd, Ref: AlgoliaIndexDev]
           TMDB_API:
             Ref: TmdbApi
+          TMDB_API_KEY:
+            Ref: TmdbApiKey
       Events:
         TriggerCallTmdbApi:
           Type: Schedule
@@ -89,3 +95,13 @@ Resources:
           - ""
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
+
+  #Layers
+  PythonProjectLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: src/layers/python_scripts/python_layer_content.zip
+      CompatibleRuntimes:
+        - python3.13
+      CompatibleArchitectures:
+        - x86_64

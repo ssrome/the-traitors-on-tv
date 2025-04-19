@@ -15,6 +15,12 @@ update-req:
 
 deployment-package:
 	cd src/handlers/call_tmdb_api && mkdir python && pip install --target ./python -r ../../../requirements.txt 
-	
-de:
-	&& cd python && zip -r ../deployment_package.zip . && cd .. && zip deployment_package.zip handler.py
+
+uninstall-req:
+	pip uninstall -r requirements.txt -y
+
+python-layer:
+	cd src/layers/python_scripts && cp ../../../requirements.txt . && ./1-install.sh && ./2-package.sh
+
+CallTmdbApi:
+	sam local invoke CallTmdbApi --env-vars env.json

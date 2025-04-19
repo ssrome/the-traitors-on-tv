@@ -2,6 +2,11 @@ backend/.pytest_cache
 backend/src/__pycache__
 backend/src/handlers/__pycache__
 backend/src/tests/__pycache__
+backend/src/layers/python_scripts/python
+backend/src/layers/python_scripts/create_layer
+backend/src/layers/python_scripts/layer_content
+backend/src/layers/python_scripts/requirements.txt
+backend/src/layers/python_scripts/python_layer_content.zip
 frontend/node_modules
 frontend/.angular
 frontend/.DS_Store

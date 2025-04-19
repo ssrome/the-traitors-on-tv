@@ -10,6 +10,8 @@ on:
     paths:
       - "backend/**"
       - "template.yaml"
+      - ".github/workflows/deploy-to-aws.yaml"
+      - ".github/workflows/backend-tests.yaml"
     branches-ignore:
       - "dependabot/**"
 
@@ -79,14 +81,14 @@ jobs:
           echo "Branch name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
-      # - name: Predeploy script
-      #   run: |
-      #     make predeploy
-      #     find ./dist/ -type f -exec touch -t 202001011200 '{}' \;
-
-      - name: Prepare deployment package
+      - name: Prepare layer package
         run: |
-          make deployment-package
+          make python-layer
+
+      - name: Predeploy script
+        run: |
+          make predeploy
+          find ./dist/ -type f -exec touch -t 202001011200 '{}' \;
 
       - name: Remove objects in S3 folder
         run: |
