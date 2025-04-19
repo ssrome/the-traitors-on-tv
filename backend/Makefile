@@ -2,7 +2,7 @@ predeploy0:
 	mkdir dist && cp requirements.txt ./dist && cp -r ./src/handlers/. ./dist && cd dist && pip install -r requirements.txt
 
 predeploy:
-	mkdir dist && cp -r ./src/handlers/. ./dist
+	mkdir dist && cp -r ./src/handlers/. ./dist && cp -r ./src/layers/. ./dist
 
 run-env:
 	source traitorsontv/bin/activate
