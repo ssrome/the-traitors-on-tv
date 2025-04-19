@@ -14,4 +14,7 @@ update-req:
 	pip freeze > requirements.txt 
 
 deployment-package:
-	cd src/handlers/callTMDBApi && mkdir package && pip install --target ./package -r ../../../requirements.txt && cd package && zip -r ../my_deployment_package.zip . && cd .. && zip my_deployment_package.zip handler.py
+	cd src/handlers/call_tmdb_api && mkdir python && pip install --target ./python -r ../../../requirements.txt 
+	
+de:
+	&& cd python && zip -r ../deployment_package.zip . && cd .. && zip deployment_package.zip handler.py

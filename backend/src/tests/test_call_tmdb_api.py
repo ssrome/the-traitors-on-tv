@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 import datetime
 # from apiclient import APIClient
-from handlers.callTMDBApi import handler
+from handlers.call_tmdb_api import handler
 
 # class MyClient(APIClient):
 

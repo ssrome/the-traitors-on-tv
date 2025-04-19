@@ -50,10 +50,10 @@ Globals:
 
 Resources:
   # Functions
-  CallTMDBApi:
+  CallTmdbApi:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/handlers/callTMDBApi
+      CodeUri: src/handlers/call_tmdb_api
       Environment:
         Variables:
           ALGOLIA_APPLICATION_ID:
@@ -70,7 +70,7 @@ Resources:
           TMDB_API:
             Ref: TmdbApi
       Events:
-        TriggerCallTMDBApi:
+        TriggerCallTmdbApi:
           Type: Schedule
           Properties:
             Enabled: True
@@ -80,7 +80,7 @@ Resources:
         - AmazonDynamoDBReadOnlyAccess
 
   #Log groups
-  CallTMDBApiLogGroup:
+  CallTmdbApiLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       RetentionInDays: 30
@@ -88,4 +88,4 @@ Resources:
         Fn::Join:
           - ""
           - - "/aws/lambda/"
-            - Ref: CallTMDBApi
+            - Ref: CallTmdbApi
