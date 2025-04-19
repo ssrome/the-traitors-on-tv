@@ -9,6 +9,7 @@ on:
   push:
     paths:
       - "backend/**"
+      - "template.yaml"
     branches-ignore:
       - "dependabot/**"
 

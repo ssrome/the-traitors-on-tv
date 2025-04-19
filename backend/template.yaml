@@ -42,6 +42,7 @@ Globals:
     Timeout: 180
     MemorySize: 256
     Runtime: python3.13
+    Handler: handler.handler
 
     Environment:
       Variables:
@@ -53,7 +54,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/handlers/callTMDBApi
-      Handler: "callTMDBApi.handler"
       Environment:
         Variables:
           ALGOLIA_APPLICATION_ID:
