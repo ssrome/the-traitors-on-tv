@@ -39,7 +39,7 @@ Parameters:
 
 Globals:
   Function:
-    Timeout: 180
+    Timeout: 600
     MemorySize: 256
     Runtime: python3.13
     Handler: handler.handler
@@ -81,7 +81,7 @@ Resources:
           Properties:
             Enabled: True
             Schedule:
-              Fn::If: [isMain, "cron(1 0 * * ? *)", "cron(1 0 ? * 2 *)"]
+              Fn::If: [isMain, "cron(1 0 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AmazonDynamoDBReadOnlyAccess
 

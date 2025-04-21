@@ -1,6 +1,7 @@
 backend/.pytest_cache
 backend/src/__pycache__
 backend/src/handlers/__pycache__
+backend/src/handlers/call_tmdb_api/__pycache__
 backend/src/tests/__pycache__
 backend/src/layers/python_scripts/python
 backend/src/layers/python_scripts/create_layer
@@ -14,4 +15,5 @@ frontend/.DS_Store
 .vercel
 backend/env.json
 backend/.env
+backend/.env.test
 frontend/src/environments/environment.local.ts
