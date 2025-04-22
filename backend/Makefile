@@ -1,6 +1,3 @@
-predeploy0:
-	mkdir dist && cp requirements.txt ./dist && cp -r ./src/handlers/. ./dist && cd dist && pip install -r requirements.txt
-
 predeploy:
 	mkdir dist && cp -r ./src/handlers/. ./dist && cp -r ./src/layers/. ./dist
 
@@ -23,7 +20,7 @@ uninstall-req:
 	pip uninstall -r requirements.txt -y
 
 python-layer:
-	cd src/layers/python_scripts && cp ../../../requirements.txt . && ./1-install.sh && ./2-package.sh
+	cd src/layers/python_scripts && cp ../../../requirements.txt . && ./0-editreqs.sh && ./2-install.sh && ./3-package.sh
 
 CallTmdbApi:
 	sam local invoke CallTmdbApi --env-vars env.json
