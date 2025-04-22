@@ -20,7 +20,7 @@ uninstall-req:
 	pip uninstall -r requirements.txt -y
 
 python-layer:
-	cd src/layers/python_scripts && cp ../../../requirements.txt . && ./0-editreqs.sh && ./2-install.sh && ./3-package.sh
+	cd src/layers/python_scripts && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./2-install.sh && ./3-package.sh
 
 CallTmdbApi:
 	sam local invoke CallTmdbApi --env-vars env.json
