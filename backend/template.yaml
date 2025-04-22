@@ -21,11 +21,28 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Default: "/thetraitorsontv/AlgoliaObjectAPIKeyProd"
 
+  AlgoliaIndexDev:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/AlgoliaIndexDev"
+
+  AlgoliaIndexProd:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/AlgoliaIndexProd"
+
+  TmdbApi:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/TmdbApi"
+
+  TmdbApiKey:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/TmdbApiKey"
+
 Globals:
   Function:
-    Timeout: 180
+    Timeout: 600
     MemorySize: 256
     Runtime: python3.13
+    Handler: handler.handler
 
     Environment:
       Variables:
@@ -33,28 +50,58 @@ Globals:
 
 Resources:
   # Functions
-  CallTMDBApi:
+  CallTmdbApi:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist
-      Handler: "callTMDBApi.handler"
+      CodeUri: src/handlers/call_tmdb_api
+      Layers:
+        - !Ref PythonProjectLayer
+      Architectures:
+        - x86_64
       Environment:
         Variables:
-          AlgoliaApplicationID:
-            Ref: "AlgoliaApplicationID"
-          AlgoliaAPIKey:
+          ALGOLIA_APPLICATION_ID:
+            Ref: AlgoliaApplicationID
+          ALGOLIA_API_KEY:
             Fn::If:
               [
                 isMain,
                 Ref: AlgoliaObjectAPIKeyProd,
                 Ref: AlgoliaObjectAPIKeyDev,
               ]
+          ALGOLIA_INDEX:
+            Fn::If: [isMain, Ref: AlgoliaIndexProd, Ref: AlgoliaIndexDev]
+          TMDB_API:
+            Ref: TmdbApi
+          TMDB_API_KEY:
+            Ref: TmdbApiKey
       Events:
-        TriggerCallTMDBApi:
+        TriggerCallTmdbApi:
           Type: Schedule
           Properties:
             Enabled: True
             Schedule:
-              Fn::If: [isMain, "cron(1 0 * * ? *)", "cron(1 0 ? * 2 *)"]
+              Fn::If: [isMain, "cron(1 0 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AmazonDynamoDBReadOnlyAccess
+
+  #Log groups
+  CallTmdbApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/lambda/"
+            - Ref: CallTmdbApi
+
+  #Layers
+  PythonProjectLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: src/layers/python_scripts/python_layer_content.zip
+      CompatibleRuntimes:
+        - python3.13
+      CompatibleArchitectures:
+        - x86_64
