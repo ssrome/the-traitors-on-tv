@@ -104,7 +104,7 @@ jobs:
 
       - name: Deploy
         run: |
-          if [ {{ steps.branch-name.outputs.branch }} == "main" ]; then
+          if [ ${{ steps.branch-name.outputs.branch }} == "main" ]; then
             aws cloudformation deploy \
             --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ steps.project-name.outputs.project }} \

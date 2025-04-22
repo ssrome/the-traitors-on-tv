@@ -6,7 +6,7 @@ Conditions:
   isSamLocal:
     Fn::Equals: [Ref: "AWS::StackName", ""]
   isMain:
-    Fn::Equals: [Ref: "AWS::StackName", "thetraitorsontv"]
+    Fn::Equals: [Ref: "AWS::StackName", "the-traitors-on-tv"]
 
 Parameters:
   AlgoliaApplicationID:
