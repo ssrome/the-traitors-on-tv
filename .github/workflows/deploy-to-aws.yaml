@@ -6,6 +6,7 @@ env:
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
 
 on:
+  create:
   push:
     paths:
       - "backend/**"
