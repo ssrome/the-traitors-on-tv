@@ -6,14 +6,15 @@ env:
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
 
 on:
-  push:
-    paths:
-      - "backend/**"
-      - "template.yaml"
-      - ".github/workflows/deploy-to-aws.yaml"
-      - ".github/workflows/backend-tests.yaml"
-    branches-ignore:
-      - "dependabot/**"
+  - create
+  - push:
+      paths:
+        - "backend/**"
+        - "template.yaml"
+        - ".github/workflows/deploy-to-aws.yaml"
+        - ".github/workflows/backend-tests.yaml"
+      branches-ignore:
+        - "dependabot/**"
 
 jobs:
   Call-Backend-Tests-Workflow:
