@@ -7,6 +7,8 @@ env:
 
 on:
   create:
+    branches-ignore:
+      - "dependabot/**"
   push:
     paths:
       - "backend/**"

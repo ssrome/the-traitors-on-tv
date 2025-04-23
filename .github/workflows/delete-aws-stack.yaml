@@ -48,19 +48,6 @@ jobs:
           echo "Project name: $PROJECT"
           echo "project=$PROJECT" >> $GITHUB_OUTPUT
 
-      - name: Congigure clean branch name
-        id: branch-name
-        env:
-          REF: ${{ github.ref_name }}
-        run: |
-          BRANCH=`echo $REF | tr "/" "-"`
-          echo "Branch name: $BRANCH"
-          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
-
-      - name: Event
-        run: |
-          echo "${{ github.event.ref }} - ${{ github.event.ref_type }}"
-
       - name: Delete stack
         run: |
           aws cloudformation delete-stack \
