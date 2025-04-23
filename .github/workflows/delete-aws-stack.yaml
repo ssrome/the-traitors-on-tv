@@ -7,6 +7,7 @@ on:
 
 jobs:
   delete:
+    if: github.event.ref_type == 'branch'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -56,7 +57,11 @@ jobs:
           echo "Branch name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
+      - name: Event
+        run: |
+          echo "${{ github.event.ref }} - ${{ github.event.ref_type }}"
+
       - name: Delete stack
         run: |
           aws cloudformation delete-stack \
-          --stack-name ${{ steps.project-name.outputs.project }}-${{ steps.branch-name.outputs.branch }}
+          --stack-name ${{ steps.project-name.outputs.project }}-${{ github.event.ref }}
