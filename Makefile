@@ -2,7 +2,7 @@ install-fe:
 	npm install --prefix frontend
 
 install-be:
-	pip install -r requirements.txt --prefix backend
+	cd backend && pip install -r requirements.txt
 
 run-fe:
 	npm start --prefix frontend
@@ -17,12 +17,11 @@ test-be:
 	cd backend && pytest
 
 update-req:
-	pip freeze > requirements.txt  --prefix backend
+	cd backend && pip freeze > requirements.txt 
 
 watch-test-report:
 	pytest-watch --beforerun "pytest --html=./test-report.html --self-contained-html"  --prefix backend
 .PHONY: watch-test-report
 
 watch-test:
-	pytest-watch  --prefix backend
-
+	cd backend && pytest-watch

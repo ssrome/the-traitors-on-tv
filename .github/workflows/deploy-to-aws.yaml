@@ -6,9 +6,15 @@ env:
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
 
 on:
+  create:
+    branches-ignore:
+      - "dependabot/**"
   push:
     paths:
       - "backend/**"
+      - "template.yaml"
+      - ".github/workflows/deploy-to-aws.yaml"
+      - ".github/workflows/backend-tests.yaml"
     branches-ignore:
       - "dependabot/**"
 
@@ -31,7 +37,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: 3.13
 
       - name: Install Pip
         run: |
@@ -78,6 +84,10 @@ jobs:
           echo "Branch name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
+      - name: Prepare layer package
+        run: |
+          make python-layer
+
       - name: Predeploy script
         run: |
           make predeploy
@@ -97,7 +107,7 @@ jobs:
 
       - name: Deploy
         run: |
-          if [ {{ github.ref_name }} == "main" ]; then
+          if [ ${{ steps.branch-name.outputs.branch }} == "main" ]; then
             aws cloudformation deploy \
             --s3-bucket ${{ env.BUCKET_NAME }} \
             --s3-prefix ${{ steps.project-name.outputs.project }} \

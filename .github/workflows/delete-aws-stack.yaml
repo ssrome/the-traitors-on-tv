@@ -1,0 +1,54 @@
+name: Delete AWS stack on branch delete
+
+on:
+  delete:
+    branches-ignore:
+      - "main"
+
+jobs:
+  delete:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.13
+
+      - name: Install Pip
+        run: |
+          python -m pip install --upgrade pip
+          pip --version
+
+      - name: Setup AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-1"
+
+      - name: Congigure project name
+        id: project-name
+        env:
+          NAME: ${{ github.repository }}
+        run: |
+          PROJECT=`echo "${NAME#ssrome/}"`
+          echo "Project name: $PROJECT"
+          echo "project=$PROJECT" >> $GITHUB_OUTPUT
+
+      - name: Delete stack
+        run: |
+          aws cloudformation delete-stack \
+          --stack-name ${{ steps.project-name.outputs.project }}-${{ github.event.ref }}
