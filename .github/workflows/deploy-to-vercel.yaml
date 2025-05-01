@@ -8,6 +8,7 @@ on:
   push:
     paths:
       - "frontend/**"
+      - "vercel.json"
     branches-ignore:
       - "dependabot/**"
 
