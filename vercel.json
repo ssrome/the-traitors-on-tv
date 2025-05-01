@@ -3,7 +3,7 @@
     "enabled": false
   },
   "rootDirectory": "frontend",
-  "buildCommand": "npm build",
+  "buildCommand": "node -r dotenv/config mynode.js && ng build",
   "framework": "angular",
   "installCommand": "npm install",
   "outputDirectory": "public"

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { algoliasearch } from "algoliasearch";
-import { environment } from "../../../environments/environment.local";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
   providedIn: "root",
