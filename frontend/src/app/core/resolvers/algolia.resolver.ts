@@ -1,7 +1,6 @@
-import { inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, ResolveFn } from "@angular/router";
 import { AlgoliaService } from "../services/algolia.service";
-import { catchError, Observable, of, take } from "rxjs";
 
 @Injectable({
   providedIn: "root",
