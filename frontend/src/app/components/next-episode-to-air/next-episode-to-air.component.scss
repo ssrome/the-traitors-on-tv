@@ -1,0 +1,35 @@
+ul {
+  display: inline-flex;
+}
+li {
+  list-style-type: none;
+}
+
+.cards {
+  display: inline-flex;
+}
+
+.card {
+  width: 350px;
+  height: fit-content;
+  margin: 10px;
+}
+
+.card-image-container {
+  margin-top: 5px;
+  padding-right: 10px;
+}
+
+.card-image {
+  width: 40px;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  object-fit: cover;
+}
+
+.header-image {
+  background-image: url("https://image.tmdb.org/t/p/w440_and_h660_face/vK6j12Oe2wEUYN0g0rAFSBBCqkl.jpg");
+  background-size: cover;
+}
+
+// https://image.tmdb.org/t/p/w440_and_h660_face/vK6j12Oe2wEUYN0g0rAFSBBCqkl.jpg

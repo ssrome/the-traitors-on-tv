@@ -8,12 +8,14 @@ backend/src/layers/python_scripts/create_layer
 backend/src/layers/python_scripts/layer_content
 backend/src/layers/python_scripts/requirements.txt
 backend/src/layers/python_scripts/python_layer_content.zip
+frontend/src/environments/environment.local.ts
+frontend/src/environments/environment.development.ts
 frontend/node_modules
 frontend/.angular
 frontend/.DS_Store
+frontend/.env
 .DS_Store
 .vercel
 backend/env.json
 backend/.env
 backend/.env.test
-frontend/src/environments/environment.local.ts
