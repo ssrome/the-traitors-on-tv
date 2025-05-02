@@ -167,17 +167,17 @@ Resources:
         Fn::Join:
           - ""
           - - "/aws/lambda/"
-          - Ref: GetIds
+            - Ref: GetIds
 
-  # TheTraitorsOnTVBucketLogGroup:
-  #   Type: AWS::Logs::LogGroup
-  #   Properties:
-  #     RetentionInDays: 30
-  #     LogGroupName:
-  #       Fn::Join:
-  #         - ""
-  #         - - "/aws/s3/"
-  #         - Ref: TheTraitorsOnTVBucket
+  TheTraitorsOnTVBucketLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/s3/"
+            - Ref: TheTraitorsOnTVBucket
 
   #Layers
   PythonProjectLayer:
