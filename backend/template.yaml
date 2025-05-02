@@ -59,7 +59,7 @@ Resources:
           [
             isMain,
             thetraitorsontv,
-            Fn::Join: ["-", [thetraitorsontv, Ref: "AWS::StackName"]],
+            Fn::Join: ["-", [thetraitorsontv, Ref: AWS::StackName]],
           ]
       VersioningConfiguration:
         Status: Suspended
