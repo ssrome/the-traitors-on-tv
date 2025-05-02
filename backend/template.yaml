@@ -49,6 +49,21 @@ Globals:
         BUILD_ENV: "production"
 
 Resources:
+  # Bucket
+  TheTraitorsOnTVBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: "Delete"
+    Properties:
+      BucketName:
+        Fn::If:
+          [
+            isMain,
+            thetraitorsontv,
+            Fn::Join: ["-", [thetraitorsontv, Ref: "AWS::StackName"]],
+          ]
+      VersioningConfiguration:
+        Status: Suspended
+
   # Functions
   CallTmdbApi:
     Type: AWS::Serverless::Function
@@ -82,8 +97,61 @@ Resources:
             Enabled: True
             Schedule:
               Fn::If: [isMain, "cron(1 0 ? * * *)", "cron(1 0 ? * 2 *)"]
+
+  GetIds:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/get_ids
+      Layers:
+        - !Ref PythonProjectLayer
+      Architectures:
+        - x86_64
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: TheTraitorsOnTVBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value:
+                      Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
-        - AmazonDynamoDBReadOnlyAccess
+        - AmazonS3ObjectLambdaExecutionRolePolicy
+        - AmazonS3ReadOnlyAccess
+
+  # #S3 Bucket Policies
+  # TheTraitorsOnTVBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket:
+  #       Ref: TheTraitorsOnTVBucket
+  #     PolicyDocument:
+  #       Statement:
+  #         - Action:
+  #             - "logs:PutLogEvents"
+  #             - "logs:CreateLogGroup"
+  #             - "logs:CreateLogStream"
+  #           Effect: "Allow"
+  #           Resource:
+  #             Fn::Join:
+  #               [
+  #                 "",
+  #                 [
+  #                   "arn:aws:logs:*:*:*",
+  #                   Ref: TheTraitorsOnTVBucketLogGroup,
+  #                   "/*",
+  #                 ],
+  #               ]
+  #         - Action:
+  #             - "s3:GetObject"
+  #           Effect: "Allow"
+  #           Resource:
+  #             Fn::Join:
+  #               ["", ["arn:aws:s3:::", Ref: TheTraitorsOnTVBucket, "/*"]]
 
   #Log groups
   CallTmdbApiLogGroup:
@@ -95,6 +163,26 @@ Resources:
           - ""
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
+
+  GetIdsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/lambda/"
+          - Ref: GetIds
+
+  TheTraitorsOnTVBucketLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/s3/"
+          - Ref: TheTraitorsOnTVBucket
 
   #Layers
   PythonProjectLayer:

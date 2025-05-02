@@ -24,3 +24,6 @@ python-layer:
 
 CallTmdbApi:
 	sam local invoke CallTmdbApi --env-vars env.json
+
+GetIds:
+	sam local invoke GetIds --env-vars env.json -e s3Event.json
