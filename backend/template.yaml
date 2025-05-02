@@ -59,7 +59,7 @@ Resources:
           [
             isMain,
             "the-traitors-on-tv",
-            Fn::Join: ["-", ["the-traitors-on-tv", Ref: AWS::StackName]],
+            Fn::Join: ["", ["the-traitors-on-tv", Ref: AWS::StackName]],
           ]
       # VersioningConfiguration:
       #   Status: Suspended
@@ -164,15 +164,15 @@ Resources:
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
 
-  GetIdsLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 30
-      LogGroupName:
-        Fn::Join:
-          - ""
-          - - "/aws/lambda/"
-          - Ref: GetIds
+  # GetIdsLogGroup:
+  #   Type: AWS::Logs::LogGroup
+  #   Properties:
+  #     RetentionInDays: 30
+  #     LogGroupName:
+  #       Fn::Join:
+  #         - ""
+  #         - - "/aws/lambda/"
+  #         - Ref: GetIds
 
   # TheTraitorsOnTVBucketLogGroup:
   #   Type: AWS::Logs::LogGroup
