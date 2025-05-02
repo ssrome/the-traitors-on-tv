@@ -19,3 +19,4 @@ frontend/.env
 backend/env.json
 backend/.env
 backend/.env.test
+backend/installCommands.txt
