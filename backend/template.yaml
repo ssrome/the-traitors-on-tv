@@ -55,14 +55,9 @@ Resources:
     DeletionPolicy: "Delete"
     Properties:
       BucketName:
-        Fn::If:
-          [
-            isMain,
-            "the-traitors-on-tv",
-            Fn::Join: ["", ["the-traitors-on-tv", Ref: AWS::StackName]],
-          ]
-      # VersioningConfiguration:
-      #   Status: Suspended
+        Ref: AWS::StackName
+      VersioningConfiguration:
+        Status: Suspended
 
   # Functions
   CallTmdbApi:
@@ -106,24 +101,24 @@ Resources:
         - !Ref PythonProjectLayer
       Architectures:
         - x86_64
-      # Events:
-      #   S3Event:
-      #     Type: S3
-      #     Properties:
-      #       Bucket:
-      #         Ref: TheTraitorsOnTVBucket
-      #       Events: s3:ObjectCreated:*
-      #       Filter:
-      #         S3Key:
-      #           Rules:
-      #             - Name: suffix
-      #               Value:
-      #                 Fn::If: [isMain, "prod.csv", "dev.csv"]
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: TheTraitorsOnTVBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value:
+                      Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
 
-  # #S3 Bucket Policies
+  #S3 Bucket Policies
   # TheTraitorsOnTVBucketPolicy:
   #   Type: AWS::S3::BucketPolicy
   #   Properties:
