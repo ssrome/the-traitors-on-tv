@@ -167,16 +167,6 @@ Resources:
           - - "/aws/lambda/"
             - Ref: GetIds
 
-  TheTraitorsOnTVBucketLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 30
-      LogGroupName:
-        Fn::Join:
-          - ""
-          - - "/aws/s3/"
-            - Ref: TheTraitorsOnTVBucket
-
   #Layers
   PythonProjectLayer:
     Type: AWS::Serverless::LayerVersion
