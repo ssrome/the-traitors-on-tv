@@ -56,8 +56,6 @@ Resources:
     Properties:
       BucketName:
         Ref: AWS::StackName
-      VersioningConfiguration:
-        Status: Suspended
 
   # Functions
   CallTmdbApi:
