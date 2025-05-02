@@ -61,8 +61,8 @@ Resources:
             thetraitorsontv,
             Fn::Join: ["-", [thetraitorsontv, Ref: AWS::StackName]],
           ]
-      VersioningConfiguration:
-        Status: Suspended
+      # VersioningConfiguration:
+      #   Status: Suspended
 
   # Functions
   CallTmdbApi:
@@ -106,19 +106,19 @@ Resources:
         - !Ref PythonProjectLayer
       Architectures:
         - x86_64
-      Events:
-        S3Event:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: TheTraitorsOnTVBucket
-            Events: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: suffix
-                    Value:
-                      Fn::If: [isMain, "prod.csv", "dev.csv"]
+      # Events:
+      #   S3Event:
+      #     Type: S3
+      #     Properties:
+      #       Bucket:
+      #         Ref: TheTraitorsOnTVBucket
+      #       Events: s3:ObjectCreated:*
+      #       Filter:
+      #         S3Key:
+      #           Rules:
+      #             - Name: suffix
+      #               Value:
+      #                 Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
@@ -174,15 +174,15 @@ Resources:
           - - "/aws/lambda/"
           - Ref: GetIds
 
-  TheTraitorsOnTVBucketLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 30
-      LogGroupName:
-        Fn::Join:
-          - ""
-          - - "/aws/s3/"
-          - Ref: TheTraitorsOnTVBucket
+  # TheTraitorsOnTVBucketLogGroup:
+  #   Type: AWS::Logs::LogGroup
+  #   Properties:
+  #     RetentionInDays: 30
+  #     LogGroupName:
+  #       Fn::Join:
+  #         - ""
+  #         - - "/aws/s3/"
+  #         - Ref: TheTraitorsOnTVBucket
 
   #Layers
   PythonProjectLayer:
