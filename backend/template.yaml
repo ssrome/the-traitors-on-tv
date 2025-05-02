@@ -99,19 +99,19 @@ Resources:
         - !Ref PythonProjectLayer
       Architectures:
         - x86_64
-      # Events:
-      #   S3Event:
-      #     Type: S3
-      #     Properties:
-      #       Bucket:
-      #         Ref: TheTraitorsOnTVBucket
-      # Events: s3:ObjectCreated:*
-      # Filter:
-      #   S3Key:
-      #     Rules:
-      #       - Name: suffix
-      #         Value:
-      #           Fn::If: [isMain, "prod.csv", "dev.csv"]
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: TheTraitorsOnTVBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value:
+                      Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
