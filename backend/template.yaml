@@ -58,8 +58,8 @@ Resources:
         Fn::If:
           [
             isMain,
-            thetraitorsontv,
-            Fn::Join: ["-", [thetraitorsontv, Ref: AWS::StackName]],
+            "the-traitors-on-tv",
+            Fn::Join: ["-", ["the-traitors-on-tv", Ref: AWS::StackName]],
           ]
       # VersioningConfiguration:
       #   Status: Suspended
