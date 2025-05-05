@@ -122,7 +122,8 @@ Resources:
               Action:
                 - "sns:Publish"
               Resource:
-                Ref: ShowIDsSNSTopic
+                Sub:
+                  Ref: ShowIDsSNSTopic
 
   # SNS
   ShowIDsSNSTopic:
@@ -131,7 +132,8 @@ Resources:
       Subscription:
         Endpoint:
           GetAtt:
-            - Ref: GetIds
+            - Sub:
+              Ref: GetIds
             - Arn
         Protocol: "lambda"
 
