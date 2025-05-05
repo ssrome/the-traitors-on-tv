@@ -1,7 +1,6 @@
 import json
 import pytest
 from pytest import MonkeyPatch as monkeypatch
-import uuid_utils as uuid
 import unittest
 from unittest.mock import MagicMock
 from unittest.mock import patch

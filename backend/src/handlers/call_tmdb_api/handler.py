@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 import requests
-import uuid_utils as uuid
 import os
 import sys
 from dotenv import load_dotenv
@@ -28,9 +27,8 @@ def handler(event, context):
       response_json = response.json()
       
       date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-      uuid_value = uuid.uuid4()
 
-      to_save = {**response.json(), "uuid": str(uuid_value), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
+      to_save = {**response.json(), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
 
       saved_response_id = save_to_algolia(to_save)
     
