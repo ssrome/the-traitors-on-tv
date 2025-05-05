@@ -59,9 +59,15 @@ Resources:
         Ref: AWS::StackName
 
   # SNS
-  # ShowIDsSNSTopic:
-  #   Type: AWS::SNS::Topic
-  #   Properties:
+  ShowIDsSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        Endpoint:
+          GetAtt:
+            - Ref: GetIds
+            - Arn
+        Protocol: "lambda"
 
   # Functions
   CallTmdbApi:
@@ -101,6 +107,10 @@ Resources:
       CodeUri: src/handlers/get_ids
       Layers:
         - !Ref PythonProjectLayer
+      Environment:
+        Variables:
+          SNS_TOPIC:
+            Ref: ShowIDsSNSTopic
       Events:
         S3Event:
           Type: S3
@@ -123,9 +133,19 @@ Resources:
               Action:
                 - "sns:Publish"
               Resource:
-                "*"
-                # Ref: ShowIDsSNSTopic
-          # PolicyName: SNSPublishPolicy
+                Ref: ShowIDsSNSTopic
+
+  # SNS Subscription
+  # ShowIDsSNSSubscription:
+  #   Type: AWS::SNS::Subscription
+  #   Properties:
+  #     Endpoint:
+  #       GetAtt:
+  #         - Ref: GetIds
+  #         - Arn
+  #     Protocol: "lambda"
+  #     TopicArn:
+  #       Ref: ShowIDsSNSTopic
 
   # Log groups
   CallTmdbApiLogGroup:

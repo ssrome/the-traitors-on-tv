@@ -36,7 +36,7 @@ python-layer:
 	cd src/layers/python_scripts && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./1-install.sh && ./2-package.sh
 
 CallTmdbApi:
-	sam local invoke CallTmdbApi --env-vars env.json
+	sam local invoke CallTmdbApi --env-vars env.json -e snsEvent.json
 
 GetIds:
 	sam local invoke GetIds --env-vars env.json -e s3Event.json
