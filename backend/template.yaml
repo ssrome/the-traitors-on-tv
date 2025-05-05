@@ -128,11 +128,10 @@ Resources:
               Action:
                 - "sns:Publish"
               Resource:
-                Sub:
-                  Ref: ShowIDsSNSTopic
+                Ref: ShowIDsSNSTopic
 
   # SNS
-  # ShowIDsSNSTopic:
+  # ShowIDsSNSTopicSubscription:
   #   Type: AWS::SNS::Subscription
   #   Properties:
   #     Subscription:
@@ -141,6 +140,8 @@ Resources:
   #           - Ref: GetIds
   #           - Arn
   #       Protocol: "lambda"
+  #       TopicArn:
+  #         Ref: ShowIDsSNSTopic
 
   # Log groups
   CallTmdbApiLogGroup:
