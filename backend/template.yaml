@@ -126,15 +126,15 @@ Resources:
                   Ref: ShowIDsSNSTopic
 
   # SNS
-  ShowIDsSNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        Endpoint:
-          GetAtt:
-            - Ref: GetIds
-            - Arn
-        Protocol: "lambda"
+  # ShowIDsSNSTopic:
+  #   Type: AWS::SNS::Topic
+  #   Properties:
+  #     Subscription:
+  #       Endpoint:
+  #         GetAtt:
+  #           - Ref: GetIds
+  #           - Arn
+  #       Protocol: "lambda"
 
   # Log groups
   CallTmdbApiLogGroup:
