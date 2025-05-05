@@ -58,17 +58,6 @@ Resources:
       BucketName:
         Ref: AWS::StackName
 
-  # SNS
-  ShowIDsSNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        Endpoint:
-          GetAtt:
-            - Ref: GetIds
-            - Arn
-        Protocol: "lambda"
-
   # Functions
   CallTmdbApi:
     Type: AWS::Serverless::Function
@@ -135,17 +124,16 @@ Resources:
               Resource:
                 Ref: ShowIDsSNSTopic
 
-  # SNS Subscription
-  # ShowIDsSNSSubscription:
-  #   Type: AWS::SNS::Subscription
-  #   Properties:
-  #     Endpoint:
-  #       GetAtt:
-  #         - Ref: GetIds
-  #         - Arn
-  #     Protocol: "lambda"
-  #     TopicArn:
-  #       Ref: ShowIDsSNSTopic
+  # SNS
+  ShowIDsSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        Endpoint:
+          GetAtt:
+            - Ref: GetIds
+            - Arn
+        Protocol: "lambda"
 
   # Log groups
   CallTmdbApiLogGroup:
