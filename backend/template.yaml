@@ -137,7 +137,7 @@ Resources:
       Endpoint: !GetAtt
         - GetIds
         - Arn
-      Protocol: "lambda"
+      Protocol: lambda
       TopicArn:
         Ref: ShowIDsSNSTopic
 
