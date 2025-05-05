@@ -112,8 +112,20 @@ Resources:
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
+        - SNSPublishPolicy:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "sns:Publish"
+                Resource: "*"
 
-  #Log groups
+  # SNS
+  # ShowIDsSNSTopic:
+  #   Type: AWS::SNS::Topic
+  #   Properties:
+
+  # Log groups
   CallTmdbApiLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
