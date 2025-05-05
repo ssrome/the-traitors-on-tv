@@ -122,14 +122,14 @@ Resources:
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
-        # - Version: "2012-10-17"
-        #   Statement:
-        #     - Effect: Allow
-        #       Action:
-        #         - "sns:Publish"
-        #       Resource:
-        #         Sub:
-        #           Ref: ShowIDsSNSTopic
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Publish"
+              Resource:
+                Sub:
+                  Ref: ShowIDsSNSTopic
 
   # SNS
   # ShowIDsSNSTopic:
