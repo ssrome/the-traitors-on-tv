@@ -84,9 +84,9 @@ jobs:
           echo "Branch name: $BRANCH"
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
-      - name: Prepare layer package
+      - name: Prepare layer packages
         run: |
-          make python-layer
+          make prepare-layers
 
       - name: Predeploy script
         run: |

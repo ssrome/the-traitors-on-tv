@@ -55,7 +55,7 @@ Resources:
     Properties:
       CodeUri: src/handlers/call_tmdb_api
       Layers:
-        - !Ref PythonProjectLayer
+        - !Ref CallTmdbApiLayer
       Architectures:
         - x86_64
       Environment:
@@ -101,6 +101,15 @@ Resources:
     Type: AWS::Serverless::LayerVersion
     Properties:
       ContentUri: src/layers/python_scripts/python_layer_content.zip
+      CompatibleRuntimes:
+        - python3.13
+      CompatibleArchitectures:
+        - x86_64
+
+  CallTmdbApitLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: src/layers/call_tmdb_api/python_layer_content.zip
       CompatibleRuntimes:
         - python3.13
       CompatibleArchitectures:

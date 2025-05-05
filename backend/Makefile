@@ -19,9 +19,11 @@ update-req:
 uninstall-req:
 	pip uninstall -r requirements.txt -y
 
+remove-dependancies-for-tests:
+	bash remove-dependancies-for-tests.sh
+
 prepare-layers:
 	make call-tmdb-api-layer
-	make get-ids-layer
 	make python-layer
 
 call-tmdb-api-layer:
