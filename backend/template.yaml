@@ -123,8 +123,8 @@ Resources:
               Action:
                 - "sns:Publish"
               Resource:
-                Ref: "*"
-                # ShowIDsSNSTopic
+                "*"
+                # Ref: ShowIDsSNSTopic
           # PolicyName: SNSPublishPolicy
 
   # Log groups
