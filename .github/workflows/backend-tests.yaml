@@ -32,8 +32,8 @@ jobs:
       - name: Run environment
         run: source traitorsontv/bin/activate
 
-      - name: Remove dependencies from requirements
-        run: make remove-dependancies-for-tests
+      # - name: Remove dependencies from requirements
+      #   run: make remove-dependancies-for-tests
 
       - name: Install dependencies
         run: pip install -r requirements.txt
