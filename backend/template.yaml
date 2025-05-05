@@ -135,10 +135,9 @@ Resources:
     Type: AWS::SNS::Subscription
     Properties:
       Endpoint:
-        Ref: GetIds
-        # GetAtt:
-        # - GetIds
-        # - Arn
+        GetAtt:
+          - GetIds
+          - Arn
       Protocol: "lambda"
       TopicArn:
         Ref: ShowIDsSNSTopic
