@@ -61,8 +61,6 @@ Resources:
   # SNS Topic
   ShowIDsSNSTopic:
     Type: AWS::SNS::Topic
-    Properties:
-      FifoTopic: True
 
   # Functions
   CallTmdbApi:
