@@ -132,8 +132,7 @@ Resources:
       Subscription:
         Endpoint:
           GetAtt:
-            - Sub:
-              Ref: GetIds
+            - Ref: GetIds
             - Arn
         Protocol: "lambda"
 
