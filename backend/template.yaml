@@ -100,10 +100,10 @@ Resources:
       CodeUri: src/handlers/get_ids
       Layers:
         - !Ref PythonProjectLayer
-      # Environment:
-      #   Variables:
-      #     SNS_TOPIC:
-      #       Ref: ShowIDsSNSTopic
+      Environment:
+        Variables:
+          SNS_TOPIC:
+            Ref: ShowIDsSNSTopic
       Events:
         S3Event:
           Type: S3
