@@ -58,6 +58,12 @@ Resources:
       BucketName:
         Ref: AWS::StackName
 
+  # SNS Topic
+  ShowIDsSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      FifoTopic: True
+
   # Functions
   CallTmdbApi:
     Type: AWS::Serverless::Function
@@ -127,7 +133,7 @@ Resources:
 
   # SNS
   # ShowIDsSNSTopic:
-  #   Type: AWS::SNS::Topic
+  #   Type: AWS::SNS::Subscription
   #   Properties:
   #     Subscription:
   #       Endpoint:
