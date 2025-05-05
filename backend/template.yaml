@@ -59,9 +59,9 @@ Resources:
         Ref: AWS::StackName
 
   # SNS
-  ShowIDsSNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
+  # ShowIDsSNSTopic:
+  #   Type: AWS::SNS::Topic
+  #   Properties:
 
   # Functions
   CallTmdbApi:
@@ -117,15 +117,16 @@ Resources:
       Policies:
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
-        - PolicyName: SNSPublishPolicy
-          PolicyDocument:
+        - PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
                   - "sns:Publish"
                 Resource:
-                  Ref: ShowIDsSNSTopic
+                  Ref: "*"
+                  # ShowIDsSNSTopic
+          PolicyName: SNSPublishPolicy
 
   # Log groups
   CallTmdbApiLogGroup:
