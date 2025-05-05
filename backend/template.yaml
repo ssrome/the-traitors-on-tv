@@ -43,12 +43,21 @@ Globals:
     MemorySize: 256
     Runtime: python3.13
     Handler: handler.handler
-
+    Architectures:
+      - x86_64
     Environment:
       Variables:
         BUILD_ENV: "production"
 
 Resources:
+  # Bucket
+  TheTraitorsOnTVBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: "Delete"
+    Properties:
+      BucketName:
+        Ref: AWS::StackName
+
   # Functions
   CallTmdbApi:
     Type: AWS::Serverless::Function
@@ -56,8 +65,6 @@ Resources:
       CodeUri: src/handlers/call_tmdb_api
       Layers:
         - !Ref PythonProjectLayer
-      Architectures:
-        - x86_64
       Environment:
         Variables:
           ALGOLIA_APPLICATION_ID:
@@ -81,9 +88,30 @@ Resources:
           Properties:
             Enabled: True
             Schedule:
-              Fn::If: [isMain, "cron(1 0 ? * * *)", "cron(1 0 ? * 2 *)"]
+              Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
+
+  GetIds:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/get_ids
+      Layers:
+        - !Ref PythonProjectLayer
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: TheTraitorsOnTVBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value:
+                      Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
-        - AmazonDynamoDBReadOnlyAccess
+        - AmazonS3ObjectLambdaExecutionRolePolicy
+        - AmazonS3ReadOnlyAccess
 
   #Log groups
   CallTmdbApiLogGroup:
@@ -95,6 +123,16 @@ Resources:
           - ""
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
+
+  GetIdsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/lambda/"
+            - Ref: GetIds
 
   #Layers
   PythonProjectLayer:
