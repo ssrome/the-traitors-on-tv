@@ -93,6 +93,8 @@ Resources:
             Enabled: True
             Schedule:
               Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
+      Policies:
+        - AWSLambdaBasicExecutionRole
 
   GetIds:
     Type: AWS::Serverless::Function
@@ -118,6 +120,7 @@ Resources:
                     Value:
                       Fn::If: [isMain, "prod.csv", "dev.csv"]
       Policies:
+        - AWSLambdaBasicExecutionRole
         - AmazonS3ObjectLambdaExecutionRolePolicy
         - AmazonS3ReadOnlyAccess
         - Version: "2012-10-17"
@@ -138,6 +141,32 @@ Resources:
       Protocol: lambda
       TopicArn:
         Ref: ShowIDsSNSTopic
+
+  # IAM Role
+  InvokeCallTmdbApiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "sns.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource:
+                  Fn::GetAtt:
+                    - "CallTmdbApi"
+                    - "Arn"
+          PolicyName: CallTmdbApiPolicy
 
   # Log groups
   CallTmdbApiLogGroup:
