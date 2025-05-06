@@ -61,6 +61,14 @@ Resources:
   # SNS Topic
   ShowIDsSNSTopic:
     Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub "show-ids-sns-topic"
+      TopicName: !Sub "show-ids-sns-topic"
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt
+            - CallTmdbApi
+            - Arn
 
   # Functions
   CallTmdbApi:
@@ -86,13 +94,13 @@ Resources:
             Ref: TmdbApi
           TMDB_API_KEY:
             Ref: TmdbApiKey
-      Events:
-        TriggerCallTmdbApi:
-          Type: Schedule
-          Properties:
-            Enabled: True
-            Schedule:
-              Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
+      # Events:
+      #   TriggerCallTmdbApi:
+      #     Type: Schedule
+      #     Properties:
+      #       Enabled: True
+      #       Schedule:
+      #         Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -132,27 +140,26 @@ Resources:
                 Ref: ShowIDsSNSTopic
 
   # SNS
-  ShowIDsSNSTopicSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      Endpoint: !GetAtt
-        - GetIds
-        - Arn
-      Protocol: lambda
-      TopicArn:
-        Ref: ShowIDsSNSTopic
+  # ShowIDsSNSTopicSubscription:
+  #   Type: AWS::SNS::Subscription
+  #   Properties:
+  #     Endpoint: !GetAtt
+  #       - GetIds
+  #       - Arn
+  #     Protocol: lambda
+  #     TopicArn:
+  #       Ref: ShowIDsSNSTopic
 
   # Lambda Permission
   InvokeCallTmdbApiRole:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !GetAtt
-        - GetIds
-        - Arn
+      FunctionName:
+        Ref: GetIds
       Principal: "sns.amazonaws.com"
-      SourceAccount:
-        Ref: AWS::AccountId
+      # SourceAccount:
+      #   Ref: AWS::AccountId
 
   # Log groups
   CallTmdbApiLogGroup:
@@ -193,3 +200,21 @@ Resources:
         - python3.13
       CompatibleArchitectures:
         - x86_64
+
+  ShowIDsSNSTopicPolicy:
+    Type: "AWS::SNS::TopicPolicy"
+    Properties:
+      Topics:
+        Ref: ShowIDsSNSTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sns:Publish"
+            Resource:
+              Ref: ShowIDsSNSTopic
+            Principal:
+              AWS: "*"
+            Condition:
+              ArnLike:
+                AWS:SourceArn: !Sub "arn:aws:*:*:${AWS::AccountId}:*"
