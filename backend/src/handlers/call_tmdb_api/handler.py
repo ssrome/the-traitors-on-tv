@@ -6,83 +6,61 @@ from dotenv import load_dotenv
 from algoliasearch.search.client import SearchClientSync
 import time
 import json
+import boto3
 
 load_dotenv()
 
 def handler(event, context):
   tmdb_api = os.environ.get('TMDB_API')
-  tmdb_api_key = os.environ.get('TMDB_API_KEY')  
+  tmdb_api_key = os.environ.get('TMDB_API_KEY') 
 
-  ids_to_save = get_ids()
-  saved_ids = []
-  error_ids = []
+  client = boto3.client('sns')
 
-  for id in ids_to_save:
+  response = ''
 
-    string_id = str(id["objectID"])
+  try:
+    snsMessage = event["Records"][0]["Sns"]["Message"]
 
-    response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
-  
-    if response.status_code == 200:
-      response_json = response.json()
-      
-      date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    key = 'objectID'
 
-      to_save = {**response.json(), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
+    if key in snsMessage:
 
-      saved_response_id = save_to_algolia(to_save)
+      id = snsMessage
+
+      string_id = str(id["objectID"])
+
+      tmdb_response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
     
-      if(saved_response_id == string_id):
-        saved_ids.append(id["objectID"])
+      if tmdb_response.status_code == 200:
+        response_json = tmdb_response.json()
+        
+        date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
+        to_save = {** tmdb_response.json(), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
+
+        saved_response_id = save_to_algolia(to_save)
+      
+        if(saved_response_id == string_id):
+          response = string_id + " was saved"
+
+        else:
+          response = string_id + " failed to save"
+          print(string_id + " failed to save")
+        
       else:
-        error_ids.append(id["objectID"])
-        print(string_id + " failed to save")
-      
-    else:
-      error_ids.append(id["objectID"])
-      print(string_id + " failed to fetch")
-      
+        response = string_id + " failed to fetch"
+        print(string_id + " failed to fetch")
+
+    else: 
+      response = "There was an error"
+      print("There was an error")
+
+  except Exception as e:
+    response = "There was an error"
+
   return json.dumps({
-    "errors": error_ids,
-    "saved": saved_ids
+    "message": response,
   })
-
-id_list = [
-    {
-      "objectID": 231478
-    },
-    {
-      "objectID": 208398
-    },
-    {
-      "objectID": 234294
-    },
-    {
-      "objectID": 117893
-    },
-    {
-      "objectID": 246125
-    },
-    {
-      "objectID": 244999
-    },
-    {
-      "objectID": 223503
-    },
-    {
-      "objectID": 232058
-    },
-    {
-      "objectID": 285613
-    },
-    {
-      "objectID": 261325
-    }
-  ]
-
-def get_ids():
-  return id_list
 
 def get_tmdb_info(series_id, tmdb_api, tmdb_api_key):
   
