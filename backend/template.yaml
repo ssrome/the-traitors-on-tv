@@ -94,7 +94,10 @@ Resources:
             Ref: TmdbApi
           TMDB_API_KEY:
             Ref: TmdbApiKey
-      # Events:
+      Events:
+        SnsTriggerToCallTmdbApi:
+          Topic:
+            Ref: ShowIDsSNSTopic
       #   TriggerCallTmdbApi:
       #     Type: Schedule
       #     Properties:
