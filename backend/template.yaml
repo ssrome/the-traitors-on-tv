@@ -205,7 +205,7 @@ Resources:
     Type: "AWS::SNS::TopicPolicy"
     Properties:
       Topics:
-        Ref: ShowIDsSNSTopic
+        - Ref: ShowIDsSNSTopic
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
