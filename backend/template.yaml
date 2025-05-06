@@ -157,7 +157,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName:
         Ref: GetIds
-      Principal: "sns.amazonaws.com"
+      Principal: sns.amazonaws.com
       # SourceAccount:
       #   Ref: AWS::AccountId
 
