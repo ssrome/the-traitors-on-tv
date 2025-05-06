@@ -2,6 +2,7 @@ import json
 import boto3
 from dotenv import load_dotenv
 import csv
+import os
 
 load_dotenv()
 
@@ -22,8 +23,19 @@ def handler(event, context):
         headers = next(lines)
         for line in lines:
             print(line[0])
+
+            publishToSns(line[0])
   
     except Exception as e:
         print(e)
         print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
         raise e
+
+def publishToSns(id):
+    client = boto3.client('sns')
+    response = client.publish(
+        TargetArn=os.environ.get('SNS_TOPIC'),
+        Message=json.dumps({"default":json.dumps({'objectID': id})}),
+        MessageStructure='json'
+    )
+    print(response)

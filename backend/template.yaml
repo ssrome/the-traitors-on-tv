@@ -142,31 +142,17 @@ Resources:
       TopicArn:
         Ref: ShowIDsSNSTopic
 
-  # IAM Role
+  # Lambda Permission
   InvokeCallTmdbApiRole:
-    Type: AWS::IAM::Role
+    Type: AWS::Lambda::Permission
     Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Principal:
-              Service:
-                - "sns.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      Policies:
-        - PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "lambda:InvokeFunction"
-                Resource:
-                  Fn::GetAtt:
-                    - "CallTmdbApi"
-                    - "Arn"
-          PolicyName: CallTmdbApiPolicy
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt
+        - GetIds
+        - Arn
+      Principal: "sns.amazonaws.com"
+      SourceAccount:
+        Ref: AWS::AccountId
 
   # Log groups
   CallTmdbApiLogGroup:
