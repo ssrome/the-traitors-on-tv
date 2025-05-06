@@ -14,8 +14,6 @@ def handler(event, context):
   tmdb_api = os.environ.get('TMDB_API')
   tmdb_api_key = os.environ.get('TMDB_API_KEY') 
 
-  client = boto3.client('sns')
-
   response = ''
 
   try:

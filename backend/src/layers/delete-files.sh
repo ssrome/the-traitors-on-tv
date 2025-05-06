@@ -1,0 +1,15 @@
+rm -r ./call_tmdb_api/python
+rm -r ./call_tmdb_api/create_layer
+rm -r ./call_tmdb_api/layer_content
+rm -r ./call_tmdb_api/requirements.txt
+rm -r ./call_tmdb_api/call_tmdb_api_layer_content.zip
+rm -r ./get_ids/python
+rm -r ./get_ids/create_layer
+rm -r ./get_ids/layer_content
+rm -r ./get_ids/requirements.txt
+rm -r ./get_ids/get_ids_layer_content.zip
+rm -r ./python_scripts/python
+rm -r ./python_scripts/create_layer
+rm -r ./python_scripts/layer_content
+rm -r ./python_scripts/requirements.txt
+rm -r ./python_scripts/python_layer_content.zip

@@ -11,7 +11,6 @@ import os
 from handlers.call_tmdb_api.handler import handler, get_tmdb_info, save_to_algolia
 from os.path import join, dirname
 from dotenv import load_dotenv
-import boto3
 from tests.fixtures.sns_event import SNS_MESSAGE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT
 
 envs = {
