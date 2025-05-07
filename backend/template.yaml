@@ -63,11 +63,9 @@ Resources:
     Type: AWS::SNS::Topic
     Properties:
       DisplayName:
-        Sub:
-          Ref: AWS::StackName
+        Ref: AWS::StackName
       TopicName:
-        Sub:
-          Ref: AWS::StackName
+        Ref: AWS::StackName
       Subscription:
         - Protocol: lambda
           Endpoint: !GetAtt
