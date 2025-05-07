@@ -11,7 +11,7 @@ import os
 from handlers.call_tmdb_api.handler import handler, get_tmdb_info, save_to_algolia
 from os.path import join, dirname
 from dotenv import load_dotenv
-from tests.fixtures.sns_event import SNS_MESSAGE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT
+from tests.fixtures.sns_event import SNS_MESSAGE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT, INCORRECT_KEY_SNS_MESSAGE
 
 envs = {
     "TMDB_API": "https://example.com/api/",
@@ -83,6 +83,10 @@ def test_handle_algolia_not_saving(get_tmdb_info_mock, get_tmdb_info_response_mo
         
         stub.assert_called_once()
         assert result == '{"message": "231478 failed to save"}'
+
+def test_handle_incorrect_key_in_sns_message(set_env):
+    result = handler(INCORRECT_KEY_SNS_MESSAGE, None)
+    assert result == '{"message": "There was an error"}'
 
 def test_handle_no_sns_message(set_env):
     result = handler(EMPTY_SNS_MESSAGE, None)

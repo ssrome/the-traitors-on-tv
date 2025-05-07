@@ -19,22 +19,23 @@ def handler(event, context):
   try:
     snsMessage = event["Records"][0]["Sns"]["Message"]
 
-    key = 'objectID'
+    snsMessage_json = json.loads(snsMessage)
 
-    if key in snsMessage:
+    if 'objectID' in snsMessage_json:
 
-      id = snsMessage
+      id = int(snsMessage_json["objectID"])
 
-      string_id = str(id["objectID"])
+      string_id = str(id)
 
       tmdb_response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
-    
+      
       if tmdb_response.status_code == 200:
+
         response_json = tmdb_response.json()
         
         date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-        to_save = {** tmdb_response.json(), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
+        to_save = {** tmdb_response.json(), 'objectID': id, 'updatedTimestamp': date_now }
 
         saved_response_id = save_to_algolia(to_save)
       
@@ -43,26 +44,23 @@ def handler(event, context):
 
         else:
           response = string_id + " failed to save"
-          print(string_id + " failed to save")
         
       else:
         response = string_id + " failed to fetch"
-        print(string_id + " failed to fetch")
 
     else: 
       response = "There was an error"
-      print("There was an error")
 
   except Exception as e:
     response = "There was an error"
 
+  print(response)
   return json.dumps({
     "message": response,
   })
 
 def get_tmdb_info(series_id, tmdb_api, tmdb_api_key):
-  
-  url = tmdb_api + series_id
+  url = tmdb_api + str(series_id)
     
   params = {
     "api_key": tmdb_api_key

@@ -36,10 +36,13 @@ python-layer:
 	cd src/layers/python_scripts && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./1-install.sh && ./2-package.sh
 
 CallTmdbApi:
-	make python-layer && sam local invoke CallTmdbApi --env-vars env.json -e snsEvent.json
+	sam local invoke CallTmdbApi --env-vars env.json -e ./events/snsEvent.json
 
-GetIds:
-	sam local invoke GetIds --env-vars env.json -e s3Event.json
+GetIds-s3:
+	sam local invoke GetIds --env-vars env.json -e ./events/s3Event.json
+
+GetIds-s:
+	sam local invoke GetIds --env-vars env.json -e ./events/scheduleEvent.json
 
 delete:
 	cd src/layers &&  bash ./delete-files.sh
