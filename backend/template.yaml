@@ -62,8 +62,12 @@ Resources:
   ShowIDsSNSTopic:
     Type: AWS::SNS::Topic
     Properties:
-      DisplayName: !Sub "show-ids-sns-topic"
-      TopicName: !Sub "show-ids-sns-topic"
+      DisplayName:
+        Sub:
+          Ref: AWS::StackName
+      TopicName:
+        Sub:
+          Ref: AWS::StackName
       Subscription:
         - Protocol: lambda
           Endpoint: !GetAtt
@@ -100,12 +104,6 @@ Resources:
           Properties:
             Topic:
               Ref: ShowIDsSNSTopic
-      #   TriggerCallTmdbApi:
-      #     Type: Schedule
-      #     Properties:
-      #       Enabled: True
-      #       Schedule:
-      #         Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -132,6 +130,12 @@ Resources:
                   - Name: suffix
                     Value:
                       Fn::If: [isMain, "prod.csv", "dev.csv"]
+        # ScheduleEvent:
+        #   Type: Schedule
+        #   Properties:
+        #     Enabled: True
+        #     Schedule:
+        #       Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonS3ObjectLambdaExecutionRolePolicy
@@ -144,17 +148,6 @@ Resources:
               Resource:
                 Ref: ShowIDsSNSTopic
 
-  # SNS
-  # ShowIDsSNSTopicSubscription:
-  #   Type: AWS::SNS::Subscription
-  #   Properties:
-  #     Endpoint: !GetAtt
-  #       - GetIds
-  #       - Arn
-  #     Protocol: lambda
-  #     TopicArn:
-  #       Ref: ShowIDsSNSTopic
-
   # Lambda Permission
   InvokeCallTmdbApiRole:
     Type: AWS::Lambda::Permission
@@ -163,8 +156,6 @@ Resources:
       FunctionName:
         Ref: GetIds
       Principal: sns.amazonaws.com
-      # SourceAccount:
-      #   Ref: AWS::AccountId
 
   # Log groups
   CallTmdbApiLogGroup:
