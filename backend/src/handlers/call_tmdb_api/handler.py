@@ -1,94 +1,66 @@
 from datetime import datetime, timezone
 import requests
-import uuid_utils as uuid
 import os
 import sys
 from dotenv import load_dotenv
 from algoliasearch.search.client import SearchClientSync
 import time
 import json
+import boto3
 
 load_dotenv()
 
 def handler(event, context):
   tmdb_api = os.environ.get('TMDB_API')
-  tmdb_api_key = os.environ.get('TMDB_API_KEY')  
+  tmdb_api_key = os.environ.get('TMDB_API_KEY') 
 
-  ids_to_save = get_ids()
-  saved_ids = []
-  error_ids = []
+  response = ''
 
-  for id in ids_to_save:
+  try:
+    snsMessage = event["Records"][0]["Sns"]["Message"]
 
-    string_id = str(id["objectID"])
+    snsMessage_json = json.loads(snsMessage)
 
-    response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
-  
-    if response.status_code == 200:
-      response_json = response.json()
+    if 'objectID' in snsMessage_json:
+
+      id = int(snsMessage_json["objectID"])
+
+      string_id = str(id)
+
+      tmdb_response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
       
-      date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-      uuid_value = uuid.uuid4()
+      if tmdb_response.status_code == 200:
 
-      to_save = {**response.json(), "uuid": str(uuid_value), 'objectID': id["objectID"], 'updatedTimestamp': date_now }
+        response_json = tmdb_response.json()
+        
+        date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-      saved_response_id = save_to_algolia(to_save)
-    
-      if(saved_response_id == string_id):
-        saved_ids.append(id["objectID"])
+        to_save = {** tmdb_response.json(), 'objectID': id, 'updatedTimestamp': date_now }
 
+        saved_response_id = save_to_algolia(to_save)
+      
+        if(saved_response_id == string_id):
+          response = string_id + " was saved"
+
+        else:
+          response = string_id + " failed to save"
+        
       else:
-        error_ids.append(id["objectID"])
-        print(string_id + " failed to save")
-      
-    else:
-      error_ids.append(id["objectID"])
-      print(string_id + " failed to fetch")
-      
+        response = string_id + " failed to fetch"
+
+    else: 
+      response = "There was an error"
+
+  except Exception as e:
+    response = "There was an error"
+
+  print(response)
   return json.dumps({
-    "errors": error_ids,
-    "saved": saved_ids
+    "message": response,
   })
 
-id_list = [
-    {
-      "objectID": 231478
-    },
-    {
-      "objectID": 208398
-    },
-    {
-      "objectID": 234294
-    },
-    {
-      "objectID": 117893
-    },
-    {
-      "objectID": 246125
-    },
-    {
-      "objectID": 244999
-    },
-    {
-      "objectID": 223503
-    },
-    {
-      "objectID": 232058
-    },
-    {
-      "objectID": 285613
-    },
-    {
-      "objectID": 261325
-    }
-  ]
-
-def get_ids():
-  return id_list
-
 def get_tmdb_info(series_id, tmdb_api, tmdb_api_key):
-  
-  url = tmdb_api + series_id
+  url = tmdb_api + str(series_id)
     
   params = {
     "api_key": tmdb_api_key

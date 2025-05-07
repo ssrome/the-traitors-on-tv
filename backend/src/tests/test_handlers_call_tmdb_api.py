@@ -1,7 +1,6 @@
 import json
 import pytest
 from pytest import MonkeyPatch as monkeypatch
-import uuid_utils as uuid
 import unittest
 from unittest.mock import MagicMock
 from unittest.mock import patch
@@ -9,9 +8,10 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv, dotenv_values
 import requests
 import os
-from handlers.call_tmdb_api.handler import handler, get_ids, get_tmdb_info, save_to_algolia
+from handlers.call_tmdb_api.handler import handler, get_tmdb_info, save_to_algolia
 from os.path import join, dirname
 from dotenv import load_dotenv
+from tests.fixtures.sns_event import SNS_MESSAGE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT, INCORRECT_KEY_SNS_MESSAGE
 
 envs = {
     "TMDB_API": "https://example.com/api/",
@@ -41,7 +41,7 @@ def get_tmdb_info_error_response_mock():
 
 @pytest.fixture
 def get_tmdb_info_mock():
-    return get_tmdb_info("2123", envs["TMDB_API"], envs["TMDB_API_KEY"])
+    return get_tmdb_info("231478", envs["TMDB_API"], envs["TMDB_API_KEY"])
 
 @pytest.fixture
 def set_env(monkeypatch):
@@ -51,66 +51,47 @@ def set_env(monkeypatch):
     monkeypatch.setenv("ALGOLIA_API_KEY", "12321")
     monkeypatch.setenv("ALGOLIA_INDEX", "test_index")
 
-@pytest.fixture
-def get_ids_mock(mocker):
-    get_ids_mock = mocker.patch("handlers.call_tmdb_api.handler.get_ids")
-    get_ids_mock.return_value = [{"objectID": 232058}]
-
-@pytest.fixture
-def get_multiple_ids_mock(mocker):
-    get_ids_mock = mocker.patch("handlers.call_tmdb_api.handler.get_ids")
-    get_ids_mock.return_value = [{"objectID": 232057}, {"objectID": 232058}]
 
 @pytest.fixture
 def save_to_algolia_mock(mocker):
     save_to_algolia_mock = mocker.patch("handlers.call_tmdb_api.handler.save_to_algolia")
-    save_to_algolia_mock.return_value = '232058'
-
-@pytest.fixture
-def save_multiple_to_algolia_mock(mocker):
-    save_to_algolia_mock = mocker.patch("handlers.call_tmdb_api.handler.save_to_algolia")
-    save_to_algolia_mock.side_effect = ['232057', '232058']
+    save_to_algolia_mock.return_value = '231478'
     
 @pytest.fixture
 def save_to_algolia_error_mock(mocker):
     save_to_algolia_mock = mocker.patch("handlers.call_tmdb_api.handler.save_to_algolia")
     save_to_algolia_mock.return_value = ""
 
-@pytest.fixture
-def save_multiple_to_algolia_one_error_mock(mocker):
-    save_to_algolia_mock = mocker.patch("handlers.call_tmdb_api.handler.save_to_algolia")
-    save_to_algolia_mock.side_effect = ['232057', '']
 
-
-def test_handler(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, get_ids_mock, save_to_algolia_mock):
+def test_handler(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, save_to_algolia_mock):
     with patch.object(requests, "get", return_value=get_tmdb_info_response_mock) as stub:
-        result = handler(None, None)
-        assert result == '{"errors": [], "saved": [232058]}'
+        result = handler(SNS_MESSAGE, None)
+        assert result == '{"message": "231478 was saved"}'
 
-def test_handler_multiple_ids(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, get_multiple_ids_mock, save_multiple_to_algolia_mock):
-    with patch.object(requests, "get", return_value=get_tmdb_info_response_mock) as stub:
-     
-        result = handler(None, None)
 
-        assert result == '{"errors": [], "saved": [232057, 232058]}'
-
-def test_handle_tmdb_error(get_tmdb_info_mock, get_tmdb_info_error_response_mock, set_env, get_ids_mock, save_to_algolia_mock):
+def test_handle_tmdb_error(get_tmdb_info_mock, get_tmdb_info_error_response_mock, set_env, save_to_algolia_mock):
     with patch.object(requests, "get", return_value=get_tmdb_info_error_response_mock) as stub:
         
-        result = handler(None, None)
+        result = handler(SNS_MESSAGE, None)
         
         stub.assert_called_once()
-        assert result == '{"errors": [232058], "saved": []}'
+        assert result == '{"message": "231478 failed to fetch"}'
 
-def test_handle_algolia_not_saving(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, get_ids_mock, save_to_algolia_error_mock):
+def test_handle_algolia_not_saving(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, save_to_algolia_error_mock):
     with patch.object(requests, "get", return_value=get_tmdb_info_response_mock) as stub:
-        result = handler(None, None)
+        result = handler(SNS_MESSAGE, None)
         
         stub.assert_called_once()
-        assert result == '{"errors": [232058], "saved": []}'
+        assert result == '{"message": "231478 failed to save"}'
 
-def test_handle_algolia_not_saving_one_of_mulitple(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, get_multiple_ids_mock, save_multiple_to_algolia_one_error_mock):
-    with patch.object(requests, "get", return_value=get_tmdb_info_response_mock) as stub:
-        result = handler(None, None)
-        
-        assert result == '{"errors": [232058], "saved": [232057]}'
+def test_handle_incorrect_key_in_sns_message(set_env):
+    result = handler(INCORRECT_KEY_SNS_MESSAGE, None)
+    assert result == '{"message": "There was an error"}'
+
+def test_handle_no_sns_message(set_env):
+    result = handler(EMPTY_SNS_MESSAGE, None)
+    assert result == '{"message": "There was an error"}'
+
+def test_handle_empty_event(set_env):
+    result = handler(EMPTY_SNS_EVENT, None)
+    assert result == '{"message": "There was an error"}'

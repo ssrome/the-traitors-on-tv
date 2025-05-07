@@ -43,12 +43,35 @@ Globals:
     MemorySize: 256
     Runtime: python3.13
     Handler: handler.handler
-
+    Architectures:
+      - x86_64
     Environment:
       Variables:
         BUILD_ENV: "production"
 
 Resources:
+  # Bucket
+  TheTraitorsOnTVBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: "Delete"
+    Properties:
+      BucketName:
+        Ref: AWS::StackName
+
+  # SNS Topic
+  ShowIDsSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName:
+        Ref: AWS::StackName
+      TopicName:
+        Ref: AWS::StackName
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt
+            - CallTmdbApi
+            - Arn
+
   # Functions
   CallTmdbApi:
     Type: AWS::Serverless::Function
@@ -56,8 +79,6 @@ Resources:
       CodeUri: src/handlers/call_tmdb_api
       Layers:
         - !Ref PythonProjectLayer
-      Architectures:
-        - x86_64
       Environment:
         Variables:
           ALGOLIA_APPLICATION_ID:
@@ -76,16 +97,65 @@ Resources:
           TMDB_API_KEY:
             Ref: TmdbApiKey
       Events:
-        TriggerCallTmdbApi:
-          Type: Schedule
+        SnsTriggerEvent:
+          Type: SNS
           Properties:
-            Enabled: True
-            Schedule:
-              Fn::If: [isMain, "cron(1 0 ? * * *)", "cron(1 0 ? * 2 *)"]
+            Topic:
+              Ref: ShowIDsSNSTopic
       Policies:
-        - AmazonDynamoDBReadOnlyAccess
+        - AWSLambdaBasicExecutionRole
 
-  #Log groups
+  GetIds:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/get_ids
+      Layers:
+        - !Ref PythonProjectLayer
+      Environment:
+        Variables:
+          SNS_TOPIC:
+            Ref: ShowIDsSNSTopic
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: TheTraitorsOnTVBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value:
+                      Fn::If: [isMain, "prod.csv", "dev.csv"]
+        # ScheduleEvent:
+        #   Type: Schedule
+        #   Properties:
+        #     Enabled: True
+        #     Schedule:
+        #       Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ObjectLambdaExecutionRolePolicy
+        - AmazonS3ReadOnlyAccess
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Publish"
+              Resource:
+                Ref: ShowIDsSNSTopic
+
+  # Lambda Permission
+  InvokeCallTmdbApiRole:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: GetIds
+      Principal: sns.amazonaws.com
+
+  # Log groups
   CallTmdbApiLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -96,6 +166,16 @@ Resources:
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
 
+  GetIdsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/lambda/"
+            - Ref: GetIds
+
   #Layers
   PythonProjectLayer:
     Type: AWS::Serverless::LayerVersion
@@ -105,3 +185,30 @@ Resources:
         - python3.13
       CompatibleArchitectures:
         - x86_64
+
+  CallTmdbApiLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: src/layers/call_tmdb_api/python_layer_content.zip
+      CompatibleRuntimes:
+        - python3.13
+      CompatibleArchitectures:
+        - x86_64
+
+  ShowIDsSNSTopicPolicy:
+    Type: "AWS::SNS::TopicPolicy"
+    Properties:
+      Topics:
+        - Ref: ShowIDsSNSTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sns:Publish"
+            Resource:
+              Ref: ShowIDsSNSTopic
+            Principal:
+              AWS: "*"
+            Condition:
+              ArnLike:
+                AWS:SourceArn: !Sub "arn:aws:*:*:${AWS::AccountId}:*"

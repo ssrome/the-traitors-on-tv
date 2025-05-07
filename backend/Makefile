@@ -1,6 +1,9 @@
 predeploy:
 	mkdir dist && cp -r ./src/handlers/. ./dist && cp -r ./src/layers/. ./dist
 
+create-env:
+	python3 -m venv traitorsontv
+
 run-env:
 	source traitorsontv/bin/activate
 
@@ -13,14 +16,39 @@ install-be:
 update-req:
 	pip freeze > requirements.txt 
 
-deployment-package:
-	cd src/handlers/call_tmdb_api && mkdir python && pip install --target ./python -r ../../../requirements.txt 
-
 uninstall-req:
 	pip uninstall -r requirements.txt -y
+
+remove-dependancies-for-tests:
+	bash remove-dependancies-for-tests.sh
+
+prepare-layers:
+	make call-tmdb-api-layer
+	make python-layer
+
+call-tmdb-api-layer:
+	cd src/layers/call_tmdb_api && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./1-install.sh && ./2-package.sh
+
+get-ids-layer:
+	cd src/layers/get_ids && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./1-install.sh && ./2-package.sh
 
 python-layer:
 	cd src/layers/python_scripts && cp ../../../requirements.txt . && bash ./0-editreqs.sh && ./1-install.sh && ./2-package.sh
 
 CallTmdbApi:
-	sam local invoke CallTmdbApi --env-vars env.json
+	sam local invoke CallTmdbApi --env-vars env.json -e ./events/snsEvent.json
+
+GetIds-s3:
+	sam local invoke GetIds --env-vars env.json -e ./events/s3Event.json
+
+GetIds-s:
+	sam local invoke GetIds --env-vars env.json -e ./events/scheduleEvent.json
+
+delete:
+	cd src/layers &&  bash ./delete-files.sh
+
+test:
+	make delete && pytest
+
+test-watch:
+	make delete && pytest
