@@ -81,8 +81,7 @@ def publish_to_sns(id, show_type):
     client = boto3.client('sns')
     response = client.publish(
         TargetArn=os.environ.get('SNS_TOPIC'),
-        # Message=json.dumps({"default":json.dumps({'objectID': id, "traitorsShowType": show_type})}),
-        Message=json.dumps({"default":json.dumps({'objectID': id})}),
+        Message=json.dumps({"default":json.dumps({'objectID': id, "theTraitorsShowType": show_type})}),
         MessageStructure='json'
     )
     print(response)
