@@ -37,6 +37,18 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Default: "/thetraitorsontv/TmdbApiKey"
 
+  NotionUrl:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/NotionUrl"
+
+  NotionSecretKey:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/NotionSecretKey"
+
+  NotionDatabaseId:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/thetraitorsontv/NotionDatabaseId"
+
 Globals:
   Function:
     Timeout: 600
@@ -115,6 +127,8 @@ Resources:
         Variables:
           SNS_TOPIC:
             Ref: ShowIDsSNSTopic
+          S3_BUCKET:
+            Ref: TheTraitorsOnTVBucket
       Events:
         S3Event:
           Type: S3
@@ -128,12 +142,43 @@ Resources:
                   - Name: suffix
                     Value:
                       Fn::If: [isMain, "prod.csv", "dev.csv"]
-        # ScheduleEvent:
-        #   Type: Schedule
-        #   Properties:
-        #     Enabled: True
-        #     Schedule:
-        #       Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ObjectLambdaExecutionRolePolicy
+        - AmazonS3ReadOnlyAccess
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Publish"
+              Resource:
+                Ref: ShowIDsSNSTopic
+
+  GetIdsFromNotion:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/get_ids_from_notion
+      Layers:
+        - !Ref PythonProjectLayer
+      Environment:
+        Variables:
+          SNS_TOPIC:
+            Ref: ShowIDsSNSTopic
+          NOTION_URL:
+            Ref: NotionUrl
+          NOTION_SECRET_KEY:
+            Ref: NotionSecretKey
+          NOTION_DATABASE_ID:
+            Ref: NotionDatabaseId
+          ENVIRONMENT_FILTER:
+            Fn::If: [isMain, "Prod", "Dev"]
+      Events:
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Enabled: True
+            Schedule:
+              Fn::If: [isMain, "cron(1 5 ? * * *)", "cron(1 0 ? * 2 *)"]
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonS3ObjectLambdaExecutionRolePolicy
@@ -175,6 +220,16 @@ Resources:
           - ""
           - - "/aws/lambda/"
             - Ref: GetIds
+
+  GetIdsFromNotionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 30
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - "/aws/lambda/"
+            - Ref: GetIdsFromNotion
 
   #Layers
   PythonProjectLayer:
