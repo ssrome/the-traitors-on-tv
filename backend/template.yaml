@@ -62,14 +62,6 @@ Globals:
         BUILD_ENV: "production"
 
 Resources:
-  # Bucket
-  TheTraitorsOnTVBucket:
-    Type: AWS::S3::Bucket
-    DeletionPolicy: "Delete"
-    Properties:
-      BucketName:
-        Ref: AWS::StackName
-
   # SNS Topic
   ShowIDsSNSTopic:
     Type: AWS::SNS::Topic
@@ -117,43 +109,6 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
 
-  GetIds:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/handlers/get_ids
-      Layers:
-        - !Ref PythonProjectLayer
-      Environment:
-        Variables:
-          SNS_TOPIC:
-            Ref: ShowIDsSNSTopic
-          S3_BUCKET:
-            Ref: TheTraitorsOnTVBucket
-      Events:
-        S3Event:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: TheTraitorsOnTVBucket
-            Events: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: suffix
-                    Value:
-                      Fn::If: [isMain, "prod.csv", "dev.csv"]
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AmazonS3ObjectLambdaExecutionRolePolicy
-        - AmazonS3ReadOnlyAccess
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - "sns:Publish"
-              Resource:
-                Ref: ShowIDsSNSTopic
-
   GetIdsFromNotion:
     Type: AWS::Serverless::Function
     Properties:
@@ -197,7 +152,7 @@ Resources:
     Properties:
       Action: lambda:InvokeFunction
       FunctionName:
-        Ref: GetIds
+        Ref: GetIdsFromNotion
       Principal: sns.amazonaws.com
 
   # Log groups
@@ -210,16 +165,6 @@ Resources:
           - ""
           - - "/aws/lambda/"
             - Ref: CallTmdbApi
-
-  GetIdsLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 30
-      LogGroupName:
-        Fn::Join:
-          - ""
-          - - "/aws/lambda/"
-            - Ref: GetIds
 
   GetIdsFromNotionLogGroup:
     Type: AWS::Logs::LogGroup
