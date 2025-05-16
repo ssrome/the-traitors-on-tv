@@ -1,10 +1,8 @@
 import json
 import boto3
 from dotenv import load_dotenv
-import csv
 import os
 import requests
-from urllib.parse import urlparse
 
 load_dotenv()
 
@@ -29,12 +27,14 @@ def handler(event, context):
             response_json = notion_response.json()
             
             for page in response_json["results"]:
+                tmdb_id = page["properties"]["TMDB_Id"]["number"]
+                tt_show_type = page["properties"]["Type"]["select"]["name"]
 
-                publish_to_sns(page["properties"]["TMDB_Id"]["number"],  page["properties"]["Type"]["select"]["name"])
+                publish_to_sns(tmdb_id, tt_show_type)
                 
                 info_to_send.append({
-                    "id": page["properties"]["TMDB_Id"]["number"],
-                    "type": page["properties"]["Type"]["select"]["name"]
+                    "id": tmdb_id,
+                    "show_type": tt_show_type
                 })
             
             return json.dumps({
@@ -76,7 +76,7 @@ def get_info_from_notion(notion_url, notion_database_id, notion_secret_key, envi
         print('Error getting information')
         raise e
 
-    
+
 def publish_to_sns(id, show_type):
     client = boto3.client('sns')
     response = client.publish(
