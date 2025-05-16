@@ -6,9 +6,6 @@ env:
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
 
 on:
-  create:
-    branches-ignore:
-      - "dependabot/**"
   push:
     paths:
       - "backend/**"

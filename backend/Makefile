@@ -38,11 +38,11 @@ python-layer:
 CallTmdbApi:
 	sam local invoke CallTmdbApi --env-vars env.json -e ./events/snsEvent.json
 
-GetIds-s3:
+GetIds:
 	sam local invoke GetIds --env-vars env.json -e ./events/s3Event.json
 
-GetIds-s:
-	sam local invoke GetIds --env-vars env.json -e ./events/scheduleEvent.json
+GetIdsFromNotion:
+	sam local invoke GetIdsFromNotion --env-vars env.json -e ./events/scheduleEvent.json
 
 delete:
 	cd src/layers &&  bash ./delete-files.sh

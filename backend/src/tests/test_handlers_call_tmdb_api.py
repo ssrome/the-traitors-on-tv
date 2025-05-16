@@ -11,7 +11,7 @@ import os
 from handlers.call_tmdb_api.handler import handler, get_tmdb_info, save_to_algolia
 from os.path import join, dirname
 from dotenv import load_dotenv
-from tests.fixtures.sns_event import SNS_MESSAGE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT, INCORRECT_KEY_SNS_MESSAGE
+from tests.fixtures.sns_event import SNS_MESSAGE, SNS_MESSAGE_WITH_NO_SHOW_TYPE, EMPTY_SNS_MESSAGE, EMPTY_SNS_EVENT, INCORRECT_KEY_SNS_MESSAGE
 
 envs = {
     "TMDB_API": "https://example.com/api/",
@@ -68,6 +68,10 @@ def test_handler(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, save_
         result = handler(SNS_MESSAGE, None)
         assert result == '{"message": "231478 was saved"}'
 
+def test_handler_with_no_show_type(get_tmdb_info_mock, get_tmdb_info_response_mock, set_env, save_to_algolia_mock):
+    with patch.object(requests, "get", return_value=get_tmdb_info_response_mock) as stub:
+        result = handler(SNS_MESSAGE_WITH_NO_SHOW_TYPE, None)
+        assert result == '{"message": "231478 was saved"}'
 
 def test_handle_tmdb_error(get_tmdb_info_mock, get_tmdb_info_error_response_mock, set_env, save_to_algolia_mock):
     with patch.object(requests, "get", return_value=get_tmdb_info_error_response_mock) as stub:

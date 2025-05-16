@@ -28,14 +28,16 @@ def handler(event, context):
       string_id = str(id)
 
       tmdb_response = get_tmdb_info(string_id, tmdb_api, tmdb_api_key)
+
+      date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+      show_type = snsMessage_json["theTraitorsShowType"] if 'theTraitorsShowType' in snsMessage_json else None
       
       if tmdb_response.status_code == 200:
 
         response_json = tmdb_response.json()
-        
-        date_now = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-        to_save = {** tmdb_response.json(), 'objectID': id, 'updatedTimestamp': date_now }
+        to_save = {** tmdb_response.json(), 'objectID': id, 'updatedTimestamp': date_now, 'theTraitorsShowType': show_type }
 
         saved_response_id = save_to_algolia(to_save)
       
