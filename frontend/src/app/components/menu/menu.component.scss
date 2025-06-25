@@ -1,0 +1,31 @@
+nav {
+  margin-top: 0;
+  padding: 5px 0;
+  background-color: gold;
+  color: black;
+  text-align: center;
+  size: 64px;
+}
+
+ul.main-nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.main-nav li {
+  list-style: none;
+  display: inline-block;
+  padding: 10px;
+}
+
+ul.main-nav li a {
+  text-decoration: none;
+  color: black;
+  font-weight: 700;
+  padding: 15px;
+}
+
+ul.main-nav li a:hover {
+  background-color: white;
+}
