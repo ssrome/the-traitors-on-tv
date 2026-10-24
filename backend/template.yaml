@@ -53,7 +53,7 @@ Globals:
   Function:
     Timeout: 600
     MemorySize: 256
-    Runtime: python3.13
+    Runtime: python3.14
     Handler: handler.handler
     Architectures:
       - x86_64
@@ -182,7 +182,7 @@ Resources:
     Properties:
       ContentUri: src/layers/python_scripts/python_layer_content.zip
       CompatibleRuntimes:
-        - python3.13
+        - python3.14
       CompatibleArchitectures:
         - x86_64
 
@@ -191,7 +191,7 @@ Resources:
     Properties:
       ContentUri: src/layers/call_tmdb_api/python_layer_content.zip
       CompatibleRuntimes:
-        - python3.13
+        - python3.14
       CompatibleArchitectures:
         - x86_64
 

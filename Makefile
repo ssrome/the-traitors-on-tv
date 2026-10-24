@@ -1,9 +1,6 @@
 install-fe:
 	npm install --prefix frontend
 
-install-be:
-	cd backend && pip install -r requirements.txt
-
 run-fe:
 	npm start --prefix frontend
 
