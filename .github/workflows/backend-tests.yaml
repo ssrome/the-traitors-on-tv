@@ -30,10 +30,10 @@ jobs:
           pip --version
 
       - name: Create environment
-        run: python -m venv traitorsontv
+        run: python -m venv env
 
       - name: Run environment
-        run: source traitorsontv/bin/activate
+        run: source env/bin/activate
 
       # - name: Remove dependencies from requirements
       #   run: make remove-dependancies-for-tests

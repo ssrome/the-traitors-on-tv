@@ -14,7 +14,7 @@ or
 
 ### Install dependancies
 
-`pip install -r requirements.txt`
+`uv pip install -r requirements.txt`
 
 ### Stop environment
 

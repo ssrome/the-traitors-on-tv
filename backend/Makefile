@@ -2,10 +2,10 @@ predeploy:
 	mkdir dist && cp -r ./src/handlers/. ./dist && cp -r ./src/layers/. ./dist
 
 create-env:
-	python3 -m venv traitorsontv
+	python3 -m venv env
 
 run-env:
-	source traitorsontv/bin/activate
+	source env/bin/activate
 
 end-env:
 	deactivate
