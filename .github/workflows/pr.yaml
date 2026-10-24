@@ -1,0 +1,10 @@
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  Call-Backend-Tests-Workflow:
+    uses: ./.github/workflows/backend-tests.yaml
+  Call-Frontend-Tests-Workflow:
+    uses: ./.github/workflows/frontend-tests.yaml
