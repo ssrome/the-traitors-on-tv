@@ -30,15 +30,15 @@ jobs:
     needs: Call-Backend-Tests-Workflow
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v7
         with:
-          python-version: 3.13
+          python-version-file: "backend/.python-version"
 
       - name: Install Pip
         run: |
-          python -m pip install pip==25.0.0
+          python -m pip install --upgrade pip
           pip --version
 
       - name: Setup AWS CLI
@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure AWS credentials
         id: creds
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

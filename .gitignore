@@ -30,6 +30,7 @@ frontend/.env
 .DS_Store
 .vercel
 backend/env.json
+backend/env
 backend/.env
 backend/.env.test
 backend/installCommands.txt
