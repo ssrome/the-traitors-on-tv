@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { AboutComponent } from "./about.component";
+import { About } from "./about";
 
-describe("AboutComponent", () => {
-  let component: AboutComponent;
-  let fixture: ComponentFixture<AboutComponent>;
+describe("About", () => {
+  let component: About;
+  let fixture: ComponentFixture<About>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AboutComponent],
+      imports: [About],
     }).compileComponents();
-    fixture = TestBed.createComponent(AboutComponent);
+    fixture = TestBed.createComponent(About);
     component = fixture.componentInstance;
   });
 
   it("should create", () => {
-    const fixture = TestBed.createComponent(AboutComponent);
+    const fixture = TestBed.createComponent(About);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -23,7 +23,7 @@ describe("AboutComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
     fixture.detectChanges();
     expect(compiled.querySelector("p")?.textContent).toContain(
-      "This product uses the TMDB API but is not endorsed or certified by TMDB."
+      "This product uses the TMDB API but is not endorsed or certified by TMDB.",
     );
   });
 
@@ -31,7 +31,7 @@ describe("AboutComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
     fixture.detectChanges();
     expect(compiled.querySelector("p")?.textContent).toContain(
-      "It is also powered by Algolia"
+      "It is also powered by Algolia",
     );
   });
 });

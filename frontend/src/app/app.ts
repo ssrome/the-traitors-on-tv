@@ -7,11 +7,11 @@ import { MenuComponent } from "./components/menu/menu.component";
 @Component({
   selector: "app-root",
   imports: [RouterOutlet, HeaderComponent, MenuComponent],
-  templateUrl: "./app.component.html",
-  styleUrl: "./app.component.scss",
+  templateUrl: "./app.html",
+  styleUrl: "./app.scss",
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [AlgoliaService],
 })
-export class AppComponent {
+export class App {
   title = "The Traitors on TV";
 }

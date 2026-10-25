@@ -26,6 +26,9 @@ jobs:
       - name: Run Unit Tests
         run: npm run test-headless
 
+      - name: Build app
+        run: npm run build
+
   # E2E-Tests:
   #   runs-on: ubuntu-latest
   #   defaults:
