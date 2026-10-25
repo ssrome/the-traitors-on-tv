@@ -20,7 +20,7 @@
             }})</mat-card-title
           >
           <mat-card-subtitle
-            >{{ show?.next_episode_to_air?.air_date | date }} <br />S{{
+            >{{ $safeNavigationMigration(show?.next_episode_to_air?.air_date) | date }} <br />S{{
               show?.next_episode_to_air?.season_number
             }}
             Ep.{{ show?.next_episode_to_air?.episode_number }}
