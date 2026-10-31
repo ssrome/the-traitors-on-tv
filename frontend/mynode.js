@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const successColor = "\x1b[32m%s\x1b[0m";
 const checkSign = "\u{2705}";
-require("dotenv").config({ path: "src/.env" });
+require("dotenv").config({ path: "./.env" });
 
 const envFile = `export const environment = {
     production: true,
@@ -19,7 +19,7 @@ fs.writeFile(targetPath, envFile, (err) => {
   } else {
     console.log(
       successColor,
-      `${checkSign} Successfully generated environment.ts`
+      `${checkSign} Successfully generated environment.ts`,
     );
   }
 });

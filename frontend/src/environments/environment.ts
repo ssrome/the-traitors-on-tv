@@ -1,6 +1,6 @@
 export const environment = {
-  production: true,
-  algoliaApplicationId: "",
-  algoliaApiKey: "",
-  algoliaIndex: "",
+    production: true,
+    algoliaApplicationId: 'undefined',
+    algoliaApiKey: 'undefined',
+    algoliaIndex: 'undefined'
 };

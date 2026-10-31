@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CommonModule, DatePipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
@@ -7,6 +7,7 @@ import { MatCardModule } from "@angular/material/card";
   selector: "app-next-episode-to-air",
   templateUrl: "./next-episode-to-air.component.html",
   styleUrl: "./next-episode-to-air.component.scss",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, DatePipe, MatCardModule],
 })
 export class NextEpisodeToAirComponent implements OnInit {
@@ -21,7 +22,7 @@ export class NextEpisodeToAirComponent implements OnInit {
 
   public filterShows(): void {
     this.showsNextToAir = this.allShows.filter(
-      (show: any) => show.next_episode_to_air !== null
+      (show: any) => show.next_episode_to_air !== null,
     );
   }
 }

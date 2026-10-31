@@ -138,7 +138,7 @@ describe("NextEpisodeToAirComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector("div")?.textContent).toContain(
-      `${show.original_name} (${show.origin_country[0]})`
+      `${show.original_name} (${show.origin_country[0]})`,
     );
   });
 
@@ -147,7 +147,7 @@ describe("NextEpisodeToAirComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector("div")?.textContent).toContain(
-      `${show.next_episode_to_air.season_number} Ep.${show.next_episode_to_air.episode_number}`
+      `${show.next_episode_to_air.season_number} Ep.${show.next_episode_to_air.episode_number}`,
     );
   });
 });

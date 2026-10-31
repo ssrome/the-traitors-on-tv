@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { AboutComponent } from "./about.component";
 
-describe("AboutComponent", () => {
+describe("About", () => {
   let component: AboutComponent;
   let fixture: ComponentFixture<AboutComponent>;
 
@@ -23,7 +23,7 @@ describe("AboutComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
     fixture.detectChanges();
     expect(compiled.querySelector("p")?.textContent).toContain(
-      "This product uses the TMDB API but is not endorsed or certified by TMDB."
+      "This product uses the TMDB API but is not endorsed or certified by TMDB.",
     );
   });
 
@@ -31,7 +31,7 @@ describe("AboutComponent", () => {
     const compiled = fixture.nativeElement as HTMLElement;
     fixture.detectChanges();
     expect(compiled.querySelector("p")?.textContent).toContain(
-      "It is also powered by Algolia"
+      "It is also powered by Algolia",
     );
   });
 });
