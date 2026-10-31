@@ -3,12 +3,12 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
   selector: "app-about",
-  templateUrl: "./about.html",
-  styleUrl: "./about.scss",
+  templateUrl: "./about.component.html",
+  styleUrl: "./about.component.scss",
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule],
 })
-export class About implements OnInit {
+export class AboutComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {}
 }

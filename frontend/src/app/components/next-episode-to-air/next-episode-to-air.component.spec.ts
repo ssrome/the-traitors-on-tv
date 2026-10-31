@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NextEpisodeToAirComponent } from "./next-episode-to-air";
+import { NextEpisodeToAirComponent } from "./next-episode-to-air.component";
 import { ActivatedRoute } from "@angular/router";
 
 describe("NextEpisodeToAirComponent", () => {

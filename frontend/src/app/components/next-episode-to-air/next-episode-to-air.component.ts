@@ -5,8 +5,8 @@ import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "app-next-episode-to-air",
-  templateUrl: "./next-episode-to-air.html",
-  styleUrl: "./next-episode-to-air.scss",
+  templateUrl: "./next-episode-to-air.component.html",
+  styleUrl: "./next-episode-to-air.component.scss",
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, DatePipe, MatCardModule],
 })
