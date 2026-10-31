@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:watch": "ng test --browsers=ChromeHeadless --watch",
-    "test-headless": "ng test --watch=false --browsers=ChromeHeadless",
+    "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
     "serve:ssr:app": "node dist/app/server/server.mjs"
   },
   "private": true,
