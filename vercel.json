@@ -3,8 +3,8 @@
     "enabled": false
   },
   "rootDirectory": "frontend",
-  "buildCommand": "node -r dotenv/config mynode.js && npm build",
+  "buildCommand": "npm run build",
   "framework": "angular",
   "installCommand": "npm install",
-  "outputDirectory": "dist"
+  "outputDirectory": "public"
 }
