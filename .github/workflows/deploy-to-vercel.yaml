@@ -7,9 +7,6 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
-  Call-Frontend-Tests-Workflow:
-    uses: ./.github/workflows/frontend-tests.yaml
-
   Deploy-Preview:
     if: github.ref_name != 'main'
     runs-on: ubuntu-latest
@@ -17,7 +14,7 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
-    needs: Call-Frontend-Tests-Workflow
+    # needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 

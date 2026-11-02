@@ -7,9 +7,18 @@ on:
       - "dependabot/**"
 
 jobs:
-  Call-Deploy-To-Vercel-Workflow:
-    uses: .github/workflows/deploy-to-vercel.yaml
-    secrets: inherit
-  Call-Deploy-to-AWS-Workflow:
-    uses: .github/workflows/deploy-to-aws.yaml
-    secrets: inherit
+  test-and-deploy-backend:
+    steps:
+      - name: Test-backend
+        uses: .github/workflows/backend-tests.yaml
+
+      - name:
+        uses: .github/workflows/deploy-to-aws.yaml
+
+  test-and-deploy-frontend:
+    steps:
+      - name: Test frontend
+        uses: .github/workflows/frontend-tests.yaml
+
+      - name: Deploy to Vercel
+        uses: .github/workflows/deploy-to-vercel.yaml
