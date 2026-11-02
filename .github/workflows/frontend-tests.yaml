@@ -2,11 +2,6 @@ name: Frontend Tests
 
 on: workflow_call
 
-env:
-  ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-  ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-  ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
-
 jobs:
   Unit-Tests:
     runs-on: ubuntu-latest
@@ -34,9 +29,9 @@ jobs:
       - name: Build app
         run: npm run build
         env:
-          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-          ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
+          algoliaApplicationId: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          algoliaApiKey: ${{ secrets.ALGOLIA_API_KEY }}
+          algoliaIndex: ${{ secrets.ALGOLIA_INDEX }}
 
   # E2E-Tests:
   #   runs-on: ubuntu-latest
