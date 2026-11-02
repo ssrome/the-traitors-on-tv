@@ -1,6 +1,13 @@
 name: Backend Tests
 
-on: workflow_call
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches-ignore:
+      - "dependabot/**"
+  push:
+    branches:
+      - "main"
 
 jobs:
   Unit-Tests:

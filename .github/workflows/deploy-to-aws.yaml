@@ -1,13 +1,9 @@
 name: Deploy to AWS
 
 on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
-    branches-ignore:
-      - "dependabot/**"
-  push:
-    branches:
-      - "main"
+  workflow_run:
+    workflows: ["Backend Tests"]
+    types: [completed]
 
 env:
   BUCKET_NAME: ssrome-artifacts
@@ -15,9 +11,6 @@ env:
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
 
 jobs:
-  Call-Backend-Tests-Workflow:
-    uses: ./.github/workflows/backend-tests.yaml
-
   deploy:
     runs-on: ubuntu-latest
     outputs:
@@ -26,7 +19,6 @@ jobs:
       run:
         shell: bash
         working-directory: backend
-    needs: Call-Backend-Tests-Workflow
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
