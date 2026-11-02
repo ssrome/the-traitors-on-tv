@@ -8,6 +8,8 @@ on:
 
 jobs:
   Call-Deploy-To-Vercel-Workflow:
-    uses: $/.github/workflows/deploy-to-vercel.yaml
+    uses: ./.github/workflows/deploy-to-vercel.yaml
+    secrets:
+      VercelToken: ${{ secrets.VERCEL_TOKEN }}
   Call-Deploy-to-AWS-Workflow:
-    uses: $/.github/workflows/deploy-to-aws.yaml
+    uses: ./.github/workflows/deploy-to-aws.yaml
