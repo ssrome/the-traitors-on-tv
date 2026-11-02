@@ -2,7 +2,7 @@ name: Deploy to Vercel
 
 on:
   workflow_run:
-    workflows: [Frontend Tests]
+    workflows: ["Frontend Tests"]
     types: [completed]
 
 env:
