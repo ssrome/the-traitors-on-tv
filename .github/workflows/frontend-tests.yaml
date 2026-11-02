@@ -33,7 +33,7 @@ jobs:
 
       - name: Build app
         run: npm run build
-        secrets:
+        env:
           ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
