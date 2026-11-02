@@ -1,6 +1,12 @@
 name: Deploy to AWS
 
-on: workflow_call
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
 
 env:
   BUCKET_NAME: ssrome-artifacts
