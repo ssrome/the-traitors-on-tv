@@ -18,6 +18,10 @@ env:
 jobs:
   Call-Frontend-Tests-Workflow:
     uses: ./.github/workflows/frontend-tests.yaml
+    with:
+      ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+      ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
 
   Deploy-Preview:
     if: github.ref_name != 'main'
