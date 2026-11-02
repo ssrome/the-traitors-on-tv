@@ -1,19 +1,14 @@
 name: Deploy to AWS
 
+on:
+  workflow_call:
+    branches-ignore:
+      - "dependabot/**"
+
 env:
   BUCKET_NAME: ssrome-artifacts
   CAPABILITIES: CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
   PACKAGED-TEMPLATE-FILE: template.packaged.yml
-
-on:
-  push:
-    paths:
-      - "backend/**"
-      - "template.yaml"
-      - ".github/workflows/deploy-to-aws.yaml"
-      - ".github/workflows/backend-tests.yaml"
-    branches-ignore:
-      - "dependabot/**"
 
 jobs:
   Call-Backend-Tests-Workflow:

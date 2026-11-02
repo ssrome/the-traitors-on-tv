@@ -1,18 +1,13 @@
 name: Deploy to Vercel
 
+on:
+  workflow_call:
+    branches-ignore:
+      - "dependabot/**"
+
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-on:
-  push:
-    paths:
-      - "frontend/**"
-      - "vercel.json"
-      - ".github/workflows/deploy-to-vercel.yaml"
-      - ".github/workflows/frontend-tests.yaml"
-    branches-ignore:
-      - "dependabot/**"
 
 jobs:
   Call-Frontend-Tests-Workflow:
