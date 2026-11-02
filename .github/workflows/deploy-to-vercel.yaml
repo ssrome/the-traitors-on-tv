@@ -1,10 +1,10 @@
 name: Deploy to Vercel
 
 on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
-    branches-ignore:
-      - "dependabot/**"
+  workflow_run:
+    workflows: [Frontend Tests]
+    types:
+      - completed
 
   push:
     branches:
@@ -14,26 +14,15 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-  ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-  ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-  ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
 
 jobs:
-  Call-Frontend-Tests-Workflow:
-    uses: ./.github/workflows/frontend-tests.yaml
-    env:
-      ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
-      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
-      ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
-
   Deploy-Preview:
-    if: github.ref_name != 'main'
+    if: github.ref_name != 'main' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: frontend
-    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 
@@ -50,13 +39,12 @@ jobs:
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
 
   Deploy-Production:
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'main' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: ./frontend
-    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 
