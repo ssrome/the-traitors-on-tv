@@ -14,11 +14,14 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+  ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+  ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
 
 jobs:
   Call-Frontend-Tests-Workflow:
     uses: ./.github/workflows/frontend-tests.yaml
-    with:
+    env:
       ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
       ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
       ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
