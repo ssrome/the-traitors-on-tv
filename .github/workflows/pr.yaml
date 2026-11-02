@@ -2,9 +2,11 @@ name: PR
 
 on:
   pull_request:
+    branches-ignore:
+      - "dependabot/**"
 
 jobs:
-  Call-Backend-Tests-Workflow:
-    uses: ./.github/workflows/backend-tests.yaml
-  Call-Frontend-Tests-Workflow:
-    uses: ./.github/workflows/frontend-tests.yaml
+  Call-Deploy-To-Vercel-Workflow:
+    uses: ./.github/workflows/deploy-to-vercel.yaml
+  Call-Deploy-to-AWS-Workflow:
+    uses: ./.github/workflows/deploy-to-aws.yaml
