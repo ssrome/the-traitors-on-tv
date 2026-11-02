@@ -1,6 +1,14 @@
 name: Frontend Tests
 
-on: workflow_call
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches-ignore:
+      - "dependabot/**"
+
+  push:
+    branches:
+      - "main"
 
 jobs:
   Unit-Tests:
@@ -25,6 +33,13 @@ jobs:
 
       - name: Run Unit Tests
         run: npm run test:headless
+
+      - name: Build app
+        run: npm run build
+        env:
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
 
   # E2E-Tests:
   #   runs-on: ubuntu-latest

@@ -1,14 +1,9 @@
 name: Deploy to Vercel
 
 on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
-    branches-ignore:
-      - "dependabot/**"
-
-  push:
-    branches:
-      - "main"
+  workflow_run:
+    workflows: ["Frontend Tests"]
+    types: [completed]
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -16,9 +11,6 @@ env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 jobs:
-  Call-Frontend-Tests-Workflow:
-    uses: ./.github/workflows/frontend-tests.yaml
-
   Deploy-Preview:
     if: github.ref_name != 'main'
     runs-on: ubuntu-latest
@@ -26,7 +18,6 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
-    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 
@@ -49,7 +40,6 @@ jobs:
       run:
         shell: bash
         working-directory: ./frontend
-    needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 
