@@ -7,14 +7,14 @@ on:
       - "dependabot/**"
 
 jobs:
-  test-backend:
+  call-backend-Tests:
     uses: ./.github/workflows/backend-tests.yaml
 
-  deploy-backend:
+  call-deploy-backend:
     uses: ./.github/workflows/deploy-to-aws.yaml
 
-  test-frontend:
+  call-frontend-tests:
     uses: ./.github/workflows/frontend-tests.yaml
 
-  test-and-deploy-frontend:
+  call-deploy-frontend:
     uses: ./.github/workflows/deploy-to-vercel.yaml
