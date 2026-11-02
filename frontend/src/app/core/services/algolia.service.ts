@@ -9,10 +9,10 @@ export class AlgoliaService {
   constructor() {}
 
   async getAll() {
-    const appID = environment.algoliaApplicationId;
+    const appID = environment.algoliaApplicationId ?? null;
 
-    const apiKey = environment.algoliaApiKey;
-    const indexName = environment.algoliaIndex;
+    const apiKey = environment.algoliaApiKey ?? null;
+    const indexName = environment.algoliaIndex ?? null;
 
     const client = algoliasearch(appID, apiKey);
 
