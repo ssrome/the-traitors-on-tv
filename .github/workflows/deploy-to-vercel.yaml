@@ -1,10 +1,6 @@
 name: Deploy to Vercel
 
-on:
-  workflow_call:
-    secrets:
-      VERCEL_TOKEN:
-        required: true
+on: workflow_call
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
