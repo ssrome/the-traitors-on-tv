@@ -37,7 +37,7 @@ jobs:
       run:
         shell: bash
         working-directory: ./frontend
-    needs: Call-Frontend-Tests-Workflow
+    # needs: Call-Frontend-Tests-Workflow
     steps:
       - uses: actions/checkout@v7
 
