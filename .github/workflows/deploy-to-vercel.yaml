@@ -3,8 +3,7 @@ name: Deploy to Vercel
 on:
   workflow_run:
     workflows: [Frontend Tests]
-    types:
-      - completed
+    types: [completed]
 
   push:
     branches:
