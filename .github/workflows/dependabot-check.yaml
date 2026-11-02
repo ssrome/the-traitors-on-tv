@@ -6,6 +6,8 @@ on:
       - "dependabot/**"
 
 jobs:
+  Call-Backend-Tests-Workflow:
+    uses: ./.github/workflows/backend-tests.yaml
   Call-Frontend-Tests-Workflow:
     uses: ./.github/workflows/frontend-tests.yaml
 

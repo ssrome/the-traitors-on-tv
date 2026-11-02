@@ -9,6 +9,8 @@ on:
     paths:
       - "frontend/**"
       - "vercel.json"
+      - ".github/workflows/deploy-to-vercel.yaml"
+      - ".github/workflows/frontend-tests.yaml"
     branches-ignore:
       - "dependabot/**"
 
