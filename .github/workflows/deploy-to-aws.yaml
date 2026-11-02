@@ -1,9 +1,6 @@
 name: Deploy to AWS
 
-on:
-  workflow_call:
-    branches-ignore:
-      - "dependabot/**"
+on: workflow_call
 
 env:
   BUCKET_NAME: ssrome-artifacts

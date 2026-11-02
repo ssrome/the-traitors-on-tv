@@ -1,5 +1,12 @@
 name: PR
 
+env:
+  BUCKET_NAME: ssrome-artifacts
+  CAPABILITIES: CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+  PACKAGED-TEMPLATE-FILE: template.packaged.yml
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 on:
   pull_request:
     types: [opened, edited, reopened]
