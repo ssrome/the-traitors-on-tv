@@ -6,6 +6,10 @@ on:
     branches-ignore:
       - "dependabot/**"
 
+  push:
+    branches:
+      - "main"
+
 jobs:
   Unit-Tests:
     runs-on: ubuntu-latest
