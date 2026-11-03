@@ -8,7 +8,7 @@ on:
 
 jobs:
   delete:
-    if: github.event.ref_type == 'branch' && "!contains(github.event.ref, 'dependabot')"
+    if: "github.event.ref_type == 'branch' && !contains(github.event.ref, 'dependabot')"
     runs-on: ubuntu-latest
     defaults:
       run:
