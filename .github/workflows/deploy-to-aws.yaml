@@ -1,12 +1,9 @@
 name: Deploy to AWS
 
 on:
-  pull_request:
+  push:
     branches-ignore:
       - "dependabot/**"
-  push:
-    branches:
-      - "main"
 
 env:
   BUCKET_NAME: ssrome-artifacts
@@ -19,6 +16,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: [backend-tests]
     outputs:
       env-name: ${{ steps.env-name.outputs.environment }}
     defaults:
