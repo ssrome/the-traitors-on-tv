@@ -2,8 +2,6 @@ name: Delete AWS stack on branch delete
 
 on:
   delete:
-    branches:
-      - "TOT-*"
     branches-ignore:
       - "main"
       - "dependabot/**"
