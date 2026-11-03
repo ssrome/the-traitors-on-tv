@@ -1,12 +1,9 @@
 name: Deploy to AWS
 
 on:
-  pull_request:
+  push:
     branches-ignore:
       - "dependabot/**"
-  push:
-    branches:
-      - "main"
 
 env:
   BUCKET_NAME: ssrome-artifacts
@@ -72,7 +69,7 @@ jobs:
       - name: Congigure clean branch name
         id: branch-name
         env:
-          REF: ${{ steps.project-name.outputs.project }}-${{ github.event.ref }}
+          REF: ${{ github.ref_name }}
         run: |
           BRANCH=`echo $REF | tr "/" "-"`
           echo "Branch name: $BRANCH"
