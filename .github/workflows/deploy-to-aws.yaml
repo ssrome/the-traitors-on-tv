@@ -72,7 +72,7 @@ jobs:
       - name: Congigure clean branch name
         id: branch-name
         env:
-          REF: ${{ github.ref_name }}
+          REF: ${{ steps.project-name.outputs.project }}-${{ github.event.ref }}
         run: |
           BRANCH=`echo $REF | tr "/" "-"`
           echo "Branch name: $BRANCH"
