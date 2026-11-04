@@ -13,20 +13,19 @@ import { MatCardModule } from "@angular/material/card";
 export class HomeComponent implements OnInit {
   public allShows: any = [];
   public showsNextToAir: any = [];
-  public todaysDate: any = Date.now();
+  public todaysDate: any = new Date().toJSON().split("T")[0];
   constructor(private activateRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    console.log(this.todaysDate);
     this.allShows = this.activateRoute.snapshot.data["algolia"][0]?.hits;
     this.filterShows();
   }
 
   public filterShows(): void {
-    //.next_episode_to_air.air_date
-    // "2026-10-31"
     this.showsNextToAir = this.allShows.filter(
-      (show: any) => show.next_episode_to_air !== null,
+      (show: any) =>
+        show.next_episode_to_air !== null &&
+        show.next_episode_to_air.air_date === this.todaysDate,
     );
   }
 }
