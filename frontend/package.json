@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "The Traitors On TV",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "dev": "ENV=development node -r dotenv/config mynode.js && ng serve -c development",
