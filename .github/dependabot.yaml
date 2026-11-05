@@ -5,22 +5,22 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 5
     cooldown:
-      default-days: 4
+      default-days: 7
   - package-ecosystem: "pip"
     directory: "/backend/"
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 5
     cooldown:
-      default-days: 4
+      default-days: 7
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: daily
       time: "04:00"
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 5
     cooldown:
-      default-days: 4
+      default-days: 7
