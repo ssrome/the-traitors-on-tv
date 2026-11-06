@@ -1,0 +1,21 @@
+.cards {
+  display: inline-flex;
+}
+
+.card {
+  width: 500px;
+  height: fit-content;
+  margin: 10px;
+}
+
+.card-image-container {
+  margin-top: 5px;
+  padding-right: 10px;
+}
+
+.card-image {
+  width: 120px;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  object-fit: cover;
+}
