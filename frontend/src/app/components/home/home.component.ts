@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { CommonModule, DatePipe } from "@angular/common";
-import { MatCardModule } from "@angular/material/card";
+import { CommonModule } from "@angular/common";
+import { CardsComponent } from "../../shared/cards/cards.component";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [CommonModule, DatePipe, MatCardModule],
+  imports: [CommonModule, CardsComponent],
 })
 export class HomeComponent implements OnInit {
   public allShows: any = [];
