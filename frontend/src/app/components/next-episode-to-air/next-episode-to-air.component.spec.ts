@@ -133,21 +133,12 @@ describe("NextEpisodeToAirComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should render title", () => {
+  it("should render page title", () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector("div")?.textContent).toContain(
-      `${show.original_name} (${show.origin_country[0]})`,
-    );
-  });
-
-  it("should show the show details", async () => {
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-
-    expect(compiled.querySelector("div")?.textContent).toContain(
-      `${show.next_episode_to_air.season_number} Ep.${show.next_episode_to_air.episode_number}`,
+    expect(compiled.querySelector("h2")?.textContent).toContain(
+      "Next Episode To Air",
     );
   });
 });

@@ -11,7 +11,12 @@ const envFile = `export const environment = {
   algoliaIndex: '${process.env.ALGOLIA_INDEX}'
 };
 `;
-const targetPath = path.join(__dirname, "./src/environments/environment.ts");
+
+const targetPath =
+  process.env.ENV === "development"
+    ? path.join(__dirname, "./src/environments/environment.development.ts")
+    : path.join(__dirname, "./src/environments/environment.ts");
+
 fs.writeFile(targetPath, envFile, (err) => {
   if (err) {
     console.error(err);

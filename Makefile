@@ -2,7 +2,7 @@ install-fe:
 	npm install --prefix frontend
 
 run-fe:
-	npm start --prefix frontend
+	npm run dev --prefix frontend
 
 build-fe:
 	npm run build --prefix frontend
