@@ -5,6 +5,21 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
+    groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - "@angular*"
+        update-types:
+          - "minor"
+          - "patch"
+      minor-and-patch:
+        applies-to: security-updates
+        patterns:
+          - "@angular*"
+        update-types:
+          - "minor"
+          - "patch"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
@@ -13,6 +28,29 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
+    groups:
+      version-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "algoliasearch"
+          - "boto3"
+          - "botocore"
+          - "python-dateutil"
+          - "s3transfer"
+        update-types:
+          - "minor"
+          - "patch"
+      security-minor-and-patch:
+        applies-to: security-updates
+        patterns:
+          - "algoliasearch"
+          - "boto3"
+          - "botocore"
+          - "python-dateutil"
+          - "s3transfer"
+        update-types:
+          - "minor"
+          - "patch"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
