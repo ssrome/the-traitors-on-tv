@@ -5,8 +5,8 @@ algoliasearch==4.49.0
 annotated-types==0.8.0
 async-timeout==5.0.1
 attrs==26.1.0
-boto3==1.42.97
-botocore==1.42.97
+boto3==1.43.123
+botocore==1.43.123
 certifi==2026.10.23
 charset-normalizer==3.5.2
 colorama==0.4.6
@@ -28,7 +28,7 @@ pytest-watch==4.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.4
 requests==2.34.2
-s3transfer==0.16.1
+s3transfer==0.19.3
 six==1.17.0
 typing-extensions==4.16.0
 typing-inspection==0.4.4
