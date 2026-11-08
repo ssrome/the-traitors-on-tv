@@ -4,41 +4,10 @@ updates:
     directory: "/frontend/"
     schedule:
       interval: daily
-      time: "04:00"
+      time: "01:00"
     labels:
-      - "npm dependencies"
-    groups:
-      angular-version-updates:
-        applies-to: version-updates
-        patterns:
-          - "@angular*"
-          - "typscript"
-        update-types:
-          - "minor"
-          - "patch"
-      angular-security-updates:
-        applies-to: security-updates
-        patterns:
-          - "@angular*"
-          - "typscript"
-        update-types:
-          - "minor"
-          - "patch"
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "npm"
-    directory: "/frontend/"
-    schedule:
-      interval: daily
-      time: "04:00"
-    labels:
-      - "npm dependencies"
-    ignore:
-      - dependency-name: "@angular*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "typscript"
-        update-types: ["version-update:semver-major"]
+      - "dependencies"
+      - "javascript"
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
@@ -46,61 +15,18 @@ updates:
     directory: "/backend/"
     schedule:
       interval: daily
-      time: "04:00"
+      time: "01:00"
     labels:
-      - "pip dependencies"
-    groups:
-      version-minor-and-patch:
-        applies-to: version-updates
-        patterns:
-          - "algoliasearch"
-          - "boto3"
-          - "botocore"
-          - "python-dateutil"
-          - "s3transfer"
-        update-types:
-          - "minor"
-          - "patch"
-      security-minor-and-patch:
-        applies-to: security-updates
-        patterns:
-          - "algoliasearch"
-          - "boto3"
-          - "botocore"
-          - "python-dateutil"
-          - "s3transfer"
-        update-types:
-          - "minor"
-          - "patch"
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "pip"
-    directory: "/backend/"
-    schedule:
-      interval: daily
-      time: "04:00"
-    labels:
-      - "pip dependencies"
+      - "dependencies"
+      - "python"
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
-    ignore:
-      - dependency-name: "algoliasearch"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "boto3"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "botocore"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "python-dateutil"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "s3transfer"
-        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: daily
-      time: "04:00"
+      time: "01:00"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
