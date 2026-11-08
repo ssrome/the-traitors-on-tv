@@ -8,7 +8,7 @@ import { environment } from "../../../environments/environment";
 export class AlgoliaService {
   constructor() {}
 
-  async getAll() {
+  async getAllShows() {
     const appID = environment.algoliaApplicationId ?? null;
 
     const apiKey = environment.algoliaApiKey ?? null;

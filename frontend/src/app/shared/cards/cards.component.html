@@ -1,5 +1,5 @@
-<div class="cards">
-  @for (show of shows; track show.name) {
+@for (show of shows; track show.id) {
+  <div class="cards" data-testid="cards">
     <mat-card class="card" appearance="outlined">
       <mat-card-header>
         <div class="card-image-container">
@@ -11,24 +11,27 @@
           />
         </div>
         <mat-card-title-group>
-          <mat-card-title
+          <mat-card-title [attr.data-testid]="'show-name-' + show.id"
             >{{ show?.original_name }} ({{
               show?.origin_country[0]
             }})</mat-card-title
           >
-          <mat-card-subtitle
+          <mat-card-subtitle [attr.data-testid]="'air-date-' + show.id"
             >{{
               $safeNavigationMigration(show?.next_episode_to_air?.air_date)
                 | date
             }}
-            <br />S{{ show?.next_episode_to_air?.season_number }} Ep.{{
-              show?.next_episode_to_air?.episode_number
-            }}
+            <br />
+            <span [attr.data-testid]="'season-episode-' + show.id">
+              S{{ show?.next_episode_to_air?.season_number }} Ep.{{
+                show?.next_episode_to_air?.episode_number
+              }}
+            </span>
           </mat-card-subtitle>
         </mat-card-title-group>
       </mat-card-header>
     </mat-card>
-  } @empty {
-    <h3>There are no shows airing today.</h3>
-  }
-</div>
+  </div>
+} @empty {
+  <h3 data-testid="no-shows">There are no shows airing today.</h3>
+}

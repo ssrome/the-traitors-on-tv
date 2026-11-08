@@ -8,6 +8,6 @@ import { AlgoliaService } from "../services/algolia.service";
 export class AlgoliaResolver implements Resolve<any> {
   constructor(private algolia: AlgoliaService) {}
   resolve(route: ActivatedRouteSnapshot) {
-    return this.algolia.getAll();
+    return this.algolia.getAllShows();
   }
 }

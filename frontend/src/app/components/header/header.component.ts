@@ -9,7 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
   imports: [CommonModule],
 })
 export class HeaderComponent implements OnInit {
-  public title = "The Traitors on TV";
+  public title = "The Traitors On TV";
 
   ngOnInit(): void {}
 }

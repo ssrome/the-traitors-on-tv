@@ -4,7 +4,7 @@ import { AlgoliaResolver } from "./algolia.resolver";
 import { ActivatedRouteSnapshot } from "@angular/router";
 
 describe("AlgoliaResolver", () => {
-  function setup(overrides: any = {}) {
+  const setup = (overrides: any = {}) => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
@@ -27,7 +27,7 @@ describe("AlgoliaResolver", () => {
       route,
       algoliaService,
     };
-  }
+  };
 
   it("should be created", () => {
     const { resolver } = setup();

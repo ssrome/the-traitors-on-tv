@@ -1,47 +1,53 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MenuComponent } from "./menu.component";
 import { provideRouter } from "@angular/router";
+import { render, within } from "@testing-library/angular";
+import { CommonModule } from "@angular/common";
 
 describe("MenuComponent", () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [MenuComponent],
+  const setup = async (overrides: any = {}) => {
+    const setupTools = await render(MenuComponent, {
+      imports: [CommonModule],
+      componentProperties: {},
       providers: [provideRouter([])],
-    }).compileComponents();
-    fixture = TestBed.createComponent(MenuComponent);
-    component = fixture.componentInstance;
-  });
+    });
 
-  it("should create", () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    const component = fixture.componentInstance;
+    const component = setupTools.fixture.componentInstance;
+
+    return {
+      ...setupTools,
+      component,
+    };
+  };
+
+  it("should create", async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it("should try to navigate home", async () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(compiled.querySelector("li#home-link")?.textContent).toContain(
-      "Home"
-    );
+  it("should display home link", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("home-link");
+
+    expect(testId).toBeTruthy();
+    expect(within(testId).getByText("Home")).toBeTruthy();
   });
 
-  it("should try to navigate home", async () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(
-      compiled.querySelector("li#next-episode-link")?.textContent
-    ).toContain("Next Episode To Air");
+  it("should display next episode to air link", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("next-episode-link");
+
+    expect(testId).toBeTruthy();
+    expect(within(testId).getByText("Next Episode To Air")).toBeTruthy();
   });
 
-  it("should try to navigate about", async () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(compiled.querySelector("li#about-link")?.textContent).toContain(
-      "About"
-    );
+  it("should display about link", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("about-link");
+
+    expect(testId).toBeTruthy();
+    expect(within(testId).getByText("About")).toBeTruthy();
   });
 });

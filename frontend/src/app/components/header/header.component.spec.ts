@@ -1,33 +1,33 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { HeaderComponent } from "./header.component";
+import { render, within } from "@testing-library/angular";
+import { CommonModule } from "@angular/common";
 
 describe("HeaderComponent", () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+  const setup = async (overrides: any = {}) => {
+    const setupTools = await render(HeaderComponent, {
+      imports: [CommonModule],
+      componentProperties: {},
+    });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
-    }).compileComponents();
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
-  });
+    const component = setupTools.fixture.componentInstance;
 
-  it("should create", () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const component = fixture.componentInstance;
+    return {
+      ...setupTools,
+      component,
+    };
+  };
+
+  it("should create", async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it(`should have the title`, () => {
-    expect(component.title).toEqual("The Traitors on TV");
-  });
+  it("should display the title", async () => {
+    const { getByTestId } = await setup();
 
-  it("should render title", () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(compiled.querySelector("h1.title")?.textContent).toContain(
-      "The Traitors on TV"
-    );
+    const testId = getByTestId("title");
+
+    expect(testId).toBeTruthy();
+    expect(within(testId).getByText("The Traitors On TV")).toBeTruthy();
   });
 });

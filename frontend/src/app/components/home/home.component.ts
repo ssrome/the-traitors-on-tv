@@ -12,7 +12,7 @@ import { CardsComponent } from "../../shared/cards/cards.component";
 })
 export class HomeComponent implements OnInit {
   public allShows: any = [];
-  public showsNextToAir: any = [];
+  public showsAiringToday: any = [];
   public todaysDate: any = new Date().toJSON().split("T")[0];
   constructor(private activateRoute: ActivatedRoute) {}
 
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   }
 
   public filterShows(): void {
-    this.showsNextToAir = this.allShows.filter(
+    this.showsAiringToday = this.allShows.filter(
       (show: any) =>
         show.next_episode_to_air !== null &&
         show.next_episode_to_air.air_date === this.todaysDate,
