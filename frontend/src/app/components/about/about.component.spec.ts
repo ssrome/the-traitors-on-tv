@@ -1,37 +1,56 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { AboutComponent } from "./about.component";
+import { render, within } from "@testing-library/angular";
+import { CommonModule } from "@angular/common";
 
-describe("About", () => {
-  let component: AboutComponent;
-  let fixture: ComponentFixture<AboutComponent>;
+describe("AboutComponent", () => {
+  const setup = async (overrides: any = {}) => {
+    const setupTools = await render(AboutComponent, {
+      imports: [CommonModule],
+      componentProperties: {},
+    });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AboutComponent],
-    }).compileComponents();
-    fixture = TestBed.createComponent(AboutComponent);
-    component = fixture.componentInstance;
-  });
+    const component = setupTools.fixture.componentInstance;
 
-  it("should create", () => {
-    const fixture = TestBed.createComponent(AboutComponent);
-    const component = fixture.componentInstance;
+    return {
+      ...setupTools,
+      component,
+    };
+  };
+
+  it("should create", async () => {
+    const { component } = await setup();
     expect(component).toBeTruthy();
   });
 
-  it("should contain the following TMDB related text", () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(compiled.querySelector("p")?.textContent).toContain(
-      "This product uses the TMDB API but is not endorsed or certified by TMDB.",
-    );
+  it("should contain credit text", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("credits");
+
+    expect(testId).toBeTruthy();
   });
 
-  it("should contain the following Algolia related text", () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
-    expect(compiled.querySelector("p")?.textContent).toContain(
-      "It is also powered by Algolia",
-    );
+  it("should contain the following TMDB related text", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("tmdb-credit");
+
+    expect(testId).toBeTruthy();
+    expect(
+      within(testId).getByText(
+        "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      ),
+    ).toBeTruthy();
+  });
+
+  it("should contain the following Algolia related text", async () => {
+    const { getByTestId } = await setup();
+
+    const testId = getByTestId("algolia-credit");
+
+    expect(testId).toBeTruthy();
+    expect(
+      within(testId).getByText("It is also powered by Algolia."),
+    ).toBeTruthy();
   });
 });

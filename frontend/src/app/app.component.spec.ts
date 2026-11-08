@@ -1,18 +1,27 @@
-import { TestBed } from "@angular/core/testing";
+// import { TestBed } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { provideRouter } from "@angular/router";
+import { render } from "@testing-library/angular";
+import { CommonModule } from "@angular/common";
 
-describe("AppComponent", async () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
+describe("AppComponent", () => {
+  const setup = async (overrides: any = {}) => {
+    const setupTools = await render(AppComponent, {
+      imports: [CommonModule],
+      componentProperties: {},
       providers: [provideRouter([])],
-    }).compileComponents();
-  });
+    });
 
-  it("should create the app", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    const component = setupTools.fixture.componentInstance;
+
+    return {
+      ...setupTools,
+      component,
+    };
+  };
+
+  it("should create", async () => {
+    const { component } = await setup();
+    expect(component).toBeTruthy();
   });
 });
