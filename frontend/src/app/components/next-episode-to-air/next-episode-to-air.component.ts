@@ -17,7 +17,6 @@ export class NextEpisodeToAirComponent implements OnInit {
   constructor(private activateRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    console.log(this.activateRoute.snapshot.data);
     this.allShows = this.activateRoute.snapshot.data["algolia"][0]?.hits;
     this.filterShows();
   }
