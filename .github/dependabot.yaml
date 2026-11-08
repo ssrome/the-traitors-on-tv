@@ -5,22 +5,41 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
+    labels:
+      - "npm dependencies"
     groups:
-      angular:
+      angular-version-updates:
         applies-to: version-updates
         patterns:
           - "@angular*"
+          - "typscript"
         update-types:
           - "minor"
           - "patch"
-      minor-and-patch:
+      angular-security-updates:
         applies-to: security-updates
         patterns:
           - "@angular*"
+          - "typscript"
         update-types:
           - "minor"
           - "patch"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+  - package-ecosystem: "npm"
+    directory: "/frontend/"
+    schedule:
+      interval: daily
+      time: "04:00"
+    labels:
+      - "npm dependencies"
+    ignore:
+      - dependency-name: "@angular*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typscript"
+        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 10
     cooldown:
       default-days: 7
   - package-ecosystem: "pip"
@@ -28,6 +47,8 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
+    labels:
+      - "pip dependencies"
     groups:
       version-minor-and-patch:
         applies-to: version-updates
@@ -54,6 +75,27 @@ updates:
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
+  - package-ecosystem: "pip"
+    directory: "/backend/"
+    schedule:
+      interval: daily
+      time: "04:00"
+    labels:
+      - "pip dependencies"
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "algoliasearch"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "boto3"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "botocore"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "python-dateutil"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "s3transfer"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
