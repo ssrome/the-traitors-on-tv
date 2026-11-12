@@ -6,7 +6,7 @@ annotated-types==0.8.0
 async-timeout==5.0.1
 attrs==26.1.0
 boto3==1.43.123
-botocore==1.43.123
+botocore==1.43.124
 certifi==2026.10.23
 charset-normalizer==3.5.2
 colorama==0.4.6
