@@ -33,5 +33,5 @@ six==1.17.0
 typing-extensions==4.16.0
 typing-inspection==0.4.4
 urllib3==2.8.0
-watchdog==7.0.0
+watchdog==7.1.0
 yarl==1.25.1
