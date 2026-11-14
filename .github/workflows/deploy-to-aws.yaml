@@ -58,7 +58,7 @@ jobs:
           echo "Environment name: $ENVIRONMENT"
           echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
 
-      - name: Congigure project name
+      - name: Configure project name
         id: project-name
         env:
           NAME: ${{ github.repository }}
@@ -67,7 +67,7 @@ jobs:
           echo "Project name: $PROJECT"
           echo "project=$PROJECT" >> $GITHUB_OUTPUT
 
-      - name: Congigure clean branch name
+      - name: Configure clean branch name
         id: branch-name
         env:
           REF: ${{ github.ref_name }}
