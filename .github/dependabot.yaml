@@ -8,9 +8,11 @@ updates:
     labels:
       - "dependencies"
       - "javascript"
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 10
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: "@angular/*"
   - package-ecosystem: "pip"
     directory: "/backend/"
     schedule:
